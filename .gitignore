@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+
+# turborepo
+.turbo
+
+# build
+dist
+build
+.next
+.expo
+.expo-shared
+
+# logs
+*.log
+
+# environment
+.env
+.env.local
+.env.*
+
+# mac
+.DS_Store
+
+# expo
+apps/mobile/.expo
+apps/mobile/.expo-shared
+
+# typescript
+*.tsbuildinfo
