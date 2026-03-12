@@ -74,3 +74,39 @@ git add .
 ```sh
 git add some-file.extension
 ```
+
+## First commit
+
+```sh
+git commit -m "initial commit"
+```
+
+## Set main Branch
+
+```sh
+git branch -M main
+```
+
+## Connect to github
+
+```sh
+git remote add origin https://github.com/user/repo.git
+```
+
+## Verify
+
+```sh
+git remote -v
+```
+
+## Push code
+
+```sh
+git push -u origin main
+```
+
+## If fails try to log in, follow steps and once youre loged in try again
+
+```sh
+gh auth login
+```
