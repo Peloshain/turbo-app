@@ -17,7 +17,5 @@
     "@repo/storage": "workspace:*",
     "@repo/ai": "workspace:*"
   },
-  "devDependencies": {
-    "tsx": "^4.21.0"
-  }
+  "devDependencies": {}
 }

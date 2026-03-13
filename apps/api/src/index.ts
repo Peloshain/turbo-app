@@ -3,10 +3,13 @@ import { cors } from "hono/cors";
 import { db } from "@repo/db";
 import { generateText } from "@repo/ai";
 import { getUploadUrl, getPublicUrl } from "@repo/storage";
+import { itemsRouter } from "./routes/items";
 
 const app = new Hono();
 
 app.use("*", cors());
+
+app.route("/items", itemsRouter);
 
 // Health check
 app.get("/", (c) => c.json({ status: "ok" }));
