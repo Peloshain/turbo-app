@@ -101,11 +101,23 @@ pnpm add -D tsx
 
 ## Create `apps/api/src/index.ts` with hono server configurations
 
+## Add the dev script
+
+```ts
+"dev": "bun run --hot src/index.ts"
+```
+
 # Create Expo App (apps)
 
 ```sh
 cd apps
 npx create-expo-app mobile --template blank-typescript
+```
+
+## Add the dev script
+
+```ts
+"dev": "expo start",
 ```
 
 # Git
