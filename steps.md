@@ -49,11 +49,23 @@ npx prisma init
 pnpm prisma generate
 ```
 
+### Important when `prisma generate`,be carefull getting the client route when import `PrismaClient`
+
+```ts
+//example when 'generated/prisma' is in /packages/db/generated
+//and you import it from /packages/db/prisma/seed.ts
+import { PrismaClient } from "../generated/prisma/client";
+```
+
 ## Generate initial migration
 
 ```sh
 pnpm prisma migrate dev
 ```
+
+## Seeding
+
+### Need to add the adapter to create the PrismaClient to avoid th error `PrismaClientInitializationError: `PrismaClient` needs to be constructed with a non-empty, valid 'PrismaClientOptions'`
 
 # Create AI package
 
@@ -82,6 +94,12 @@ pnpm add @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 ### important, add the dependencies from the packages to use them in apps
 
 `add "workspace:*" in package.json dependencies..`
+
+### if dependencies don't show up after pnpm install, remove node_modules
+
+```sh
+rm -rf node_modules
+```
 
 ```ts
   "dependencies": {
