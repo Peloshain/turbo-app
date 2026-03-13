@@ -89,7 +89,7 @@ pnpm add @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
   }
 ```
 
-## Create API (Hono) package
+# Create API (Hono) (apps)
 
 ```sh
 mkdir -p apps/api/src
@@ -100,6 +100,13 @@ pnpm add -D tsx
 ```
 
 ## Create `apps/api/src/index.ts` with hono server configurations
+
+# Create Expo App (apps)
+
+```sh
+cd apps
+npx create-expo-app mobile --template blank-typescript
+```
 
 # Git
 
