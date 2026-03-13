@@ -95,6 +95,14 @@ pnpm add @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 
 `add "workspace:*" in package.json dependencies..`
 
+### add the export node to the package.json
+
+```ts
+  "exports": {
+    ".": "./src/index.ts"
+  },
+```
+
 ### if dependencies don't show up after pnpm install, remove node_modules
 
 ```sh
