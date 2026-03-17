@@ -57,6 +57,8 @@ pnpm prisma generate
 import { PrismaClient } from "../generated/prisma/client";
 ```
 
+## Add .env in the `package/db` (needed for `prisma.config.ts` to get the `DATABASE_URL`)
+
 ## Generate initial migration
 
 ```sh
