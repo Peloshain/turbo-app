@@ -26,10 +26,9 @@ const categories = [
 async function main() {
   console.log("seeding categories...");
   for (const cat of categories) {
-    await db.category.upsert({
-      where: { slug: cat.slug },
-      update: {},
-      create: cat,
+    await db.category.createMany({
+      data: categories,
+      skipDuplicates: true,
     });
   }
 
