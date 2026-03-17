@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Category" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "order" INTEGER NOT NULL DEFAULT 0,
@@ -10,7 +10,7 @@ CREATE TABLE "Category" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -20,14 +20,14 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Item" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "imageUrl" TEXT NOT NULL,
     "imageKey" TEXT NOT NULL,
     "colorDesc" TEXT NOT NULL,
     "colorHex" TEXT,
-    "categoryId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "categoryId" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
@@ -35,11 +35,11 @@ CREATE TABLE "Item" (
 
 -- CreateTable
 CREATE TABLE "Outfit" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT,
     "occasion" TEXT,
     "aiGenerated" BOOLEAN NOT NULL DEFAULT false,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Outfit_pkey" PRIMARY KEY ("id")
@@ -47,9 +47,9 @@ CREATE TABLE "Outfit" (
 
 -- CreateTable
 CREATE TABLE "OutfitItem" (
-    "id" TEXT NOT NULL,
-    "outfitId" TEXT NOT NULL,
-    "itemId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "outfitId" UUID NOT NULL,
+    "itemId" UUID NOT NULL,
 
     CONSTRAINT "OutfitItem_pkey" PRIMARY KEY ("id")
 );
