@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Hono } from "hono";
 import { db } from "@repo/db";
 import { getUploadUrl, getPublicUrl } from "@repo/storage";
