@@ -148,6 +148,43 @@ npx create-expo-app mobile --template blank-typescript
 "dev": "expo start",
 ```
 
+## Add navigation
+
+```sh
+cd apps/mobile
+npx expo install expo-router expo-linking expo-constants expo-status-bar react-native-safe-area-context react-native-screens
+```
+
+## Update the entry point in `package.json`
+
+```json
+{
+  "main": "expo-router/entry"
+}
+```
+
+## Make sure that `app.json` has the plugin
+
+```json
+ "plugins": ["expo-router"]
+```
+
+## File structure in `apps/mobile/app`
+
+```Plain
+apps/mobile/app/
+├── _layout.tsx          ← root layout (providers, fonts)
+├── (tabs)/
+│   ├── _layout.tsx      ← tab bar with 3 tabs
+│   ├── index.tsx        ← Wardrobe (index)
+│   ├── outfit.tsx       ← Outfit with AI
+│   └── saved.tsx        ← My Outfits
+├── add-item/
+│   └── index.tsx        ← Add Item
+└── item/
+    └── [id].tsx         ← Item detail
+```
+
 # Git
 
 ```sh
