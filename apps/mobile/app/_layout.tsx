@@ -22,8 +22,8 @@ export default function RootLayout() {
           <Stack.Screen
             name="item/[id]"
             options={{
-              headerTitle: "Prenda",
-              headerBackTitle: "Atrás",
+              headerTitle: "Item details",
+              headerBackTitle: "Back",
             }}
           />
         </Stack>

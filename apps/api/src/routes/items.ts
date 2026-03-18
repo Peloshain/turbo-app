@@ -43,17 +43,14 @@ itemsRouter.post("/analyze", async (c) => {
 
   const raw = response.choices[0].message.content ?? "{}";
 
-  // Limpiamos por si GPT agrega backticks
+  // Clean response from ```json if the model decides to wrap it in a code block
   const cleaned = raw.replace(/```json|```/g, "").trim();
 
   try {
     const result = JSON.parse(cleaned);
     return c.json({ ok: true, ...result });
   } catch {
-    return c.json(
-      { ok: false, error: "No se pudo parsear respuesta de IA" },
-      500,
-    );
+    return c.json({ ok: false, error: "Failed to parse AI response" }, 500);
   }
 });
 

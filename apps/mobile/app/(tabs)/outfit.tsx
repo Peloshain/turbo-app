@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from "react-native";
 export default function OutfitScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.empty}>Agrega ropa primero</Text>
+      <Text style={styles.empty}>Add clothing items to build an outfit</Text>
       <Text style={styles.hint}>
-        Con al menos 3 prendas la IA puede armarte outfits
+        With at least 3 pieces, AI can create outfits for you
       </Text>
     </View>
   );

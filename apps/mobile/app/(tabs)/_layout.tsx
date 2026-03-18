@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
-// Iconos simples con texto/emoji para el MVP
+// Simple icons with emojis (temp)
 function TabIcon({
   emoji,
   label,
@@ -42,24 +42,24 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          headerTitle: "Mi guardarropa",
+          headerTitle: "My wardrobe",
           headerRight: () => (
             <Pressable
               onPress={() => router.push("/add-item")}
               style={styles.addButton}
             >
-              <Text style={styles.addButtonText}>+ Agregar</Text>
+              <Text style={styles.addButtonText}>+ Add</Text>
             </Pressable>
           ),
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="👕" label="Ropa" focused={focused} />
+            <TabIcon emoji="👕" label="Clothing" focused={focused} />
           ),
         }}
       />
       <Tabs.Screen
         name="outfit"
         options={{
-          headerTitle: "Armar outfit",
+          headerTitle: "Build Outfit",
           tabBarIcon: ({ focused }) => (
             <TabIcon emoji="✨" label="Outfit" focused={focused} />
           ),
@@ -68,9 +68,9 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="saved"
         options={{
-          headerTitle: "Mis outfits",
+          headerTitle: "My outfits",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="🗂️" label="Guardados" focused={focused} />
+            <TabIcon emoji="🗂️" label="Saved" focused={focused} />
           ),
         }}
       />

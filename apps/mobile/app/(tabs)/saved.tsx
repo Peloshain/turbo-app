@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from "react-native";
 export default function SavedScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.empty}>Sin outfits guardados</Text>
-      <Text style={styles.hint}>Los outfits que guardes aparecerán aquí</Text>
+      <Text style={styles.empty}>No saved outfits</Text>
+      <Text style={styles.hint}>The outfits you save will appear here</Text>
     </View>
   );
 }

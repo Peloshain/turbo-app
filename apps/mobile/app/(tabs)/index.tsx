@@ -3,10 +3,8 @@ import { View, Text, StyleSheet } from "react-native";
 export default function WardrobeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.empty}>Tu guardarropa está vacío</Text>
-      <Text style={styles.hint}>
-        Toca "+ Agregar" para añadir tu primera prenda
-      </Text>
+      <Text style={styles.empty}>Your wardrobe is empty</Text>
+      <Text style={styles.hint}>Tap "+ Add" to add your first item</Text>
     </View>
   );
 }
