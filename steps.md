@@ -248,3 +248,14 @@ git push -u origin main
 ```sh
 gh auth login
 ```
+
+# Android emulator
+
+## localhost aims to the emulator not the PC IP
+
+```typescript
+const API_URL = Platform.select({
+  android: "http://10.0.2.2:3000",
+  ios: process.env.EXPO_PUBLIC_API_URL,
+});
+```

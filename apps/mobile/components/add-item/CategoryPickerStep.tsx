@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { ImagePickerAsset } from "expo-image-picker";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +24,11 @@ interface Props {
   onSelectCategory: (category: Category) => void;
 }
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+//Useful for Android emulator
+const API_URL = Platform.select({
+  android: "http://10.0.2.2:3000",
+  ios: process.env.EXPO_PUBLIC_API_URL,
+});
 
 // Fetch categories from the API
 function useCategories() {
@@ -43,7 +48,6 @@ export function CategoryPickerStep({
   onSelectCategory,
 }: Props) {
   const { data: categories, isLoading: loadingCategories } = useCategories();
-
   if (loadingCategories) {
     return (
       <View style={styles.centered}>

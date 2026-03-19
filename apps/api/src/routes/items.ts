@@ -4,6 +4,8 @@ import { db } from "@repo/db";
 import { getUploadUrl, getPublicUrl } from "@repo/storage";
 import OpenAI from "openai";
 
+let categoryName = "";
+
 export const itemsRouter = new Hono();
 const prompt = `Analiza esta prenda de ropa. Es de la categoría: ${categoryName}.
                     Responde ÚNICAMENTE con un JSON válido, sin texto extra, con esta estructura:
@@ -22,9 +24,20 @@ itemsRouter.post("/analyze", async (c) => {
     categoryName: string; // "Shirts"
   }>();
 
+  ///testing without AI
+  if (process.env.NODE_ENV === "development") {
+    return c.json({
+      result: {
+        ok: true,
+        name: "test",
+        colorDesc: "Green",
+        colorHex: "#1F8508",
+      },
+    });
+  }
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini", // vision + cheap for mvp
-    max_tokens: 200,
+    max_tokens: 100,
     messages: [
       {
         role: "user",
@@ -46,7 +59,6 @@ itemsRouter.post("/analyze", async (c) => {
 
   // Clean response from ```json if the model decides to wrap it in a code block
   const cleaned = raw.replace(/```json|```/g, "").trim();
-
   try {
     const result = JSON.parse(cleaned);
     return c.json({ ok: true, ...result });

@@ -2,14 +2,14 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 // import { generateText } from "@repo/ai";
 // import { getUploadUrl, getPublicUrl } from "@repo/storage";
-// import { itemsRouter } from "./routes/items";
+import { itemsRouter } from "./routes/items";
 import { categoriesRouter } from "./routes/categories";
 
 const app = new Hono();
 
 app.use("*", cors());
 
-// app.route("/items", itemsRouter);
+app.route("/items", itemsRouter);
 app.route("/categories", categoriesRouter);
 
 // Health check

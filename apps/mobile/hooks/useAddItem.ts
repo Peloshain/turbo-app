@@ -1,8 +1,13 @@
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { useState } from "react";
+import { Platform } from "react-native";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL; // e.g.: http://localhost:3000
+//Useful for Android emulator
+const API_URL = Platform.select({
+  android: "http://10.0.2.2:3000",
+  ios: process.env.EXPO_PUBLIC_API_URL,
+});
 
 export type AnalysisResult = {
   name: string;
@@ -47,15 +52,19 @@ export function useAddItem() {
         body: JSON.stringify({ imageBase64, categoryName }),
       });
 
-      const data = await res.json();
-      if (data.ok) {
+      const text = await res.text();
+      const data = JSON.parse(text);
+
+      if (data?.result) {
         setAnalysis({
-          name: data.name,
-          colorDesc: data.colorDesc,
-          colorHex: data.colorHex,
+          name: data.result.name,
+          colorDesc: data.result.colorDesc,
+          colorHex: data.result.colorHex,
         });
         setStep("confirm");
       }
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false);
     }
