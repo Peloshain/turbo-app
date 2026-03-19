@@ -9,6 +9,16 @@ export class GeminiAdapter implements AIService {
     this.client = new GoogleGenerativeAI(apiKey);
     this.model = model;
   }
+  async analyzeText(prompt: string): Promise<AIAnalysisResult> {
+    const model = this.client.getGenerativeModel({ model: this.model });
+
+    const result = await model.generateContent([prompt]);
+
+    return {
+      description: result.response.text(),
+      raw: result.response,
+    };
+  }
 
   async analyzeImage(
     base64: string,

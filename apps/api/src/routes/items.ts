@@ -22,7 +22,7 @@ itemsRouter.post("/analyze", async (c) => {
     return c.json({ error: "imageBase64 is required" }, 400);
   }
 
-  //testing without AI
+  // testing without AI
   if (process.env.NODE_ENV === "development") {
     return c.json({
       result: {
@@ -38,6 +38,7 @@ itemsRouter.post("/analyze", async (c) => {
     return c.json({ error: "imageBase64 is required" }, 400);
   }
 
+  // image analyzer
   const { mimeType, base64 } = parseDataUrl(imageBase64);
 
   const prompt = `
@@ -57,27 +58,19 @@ itemsRouter.post("/analyze", async (c) => {
     prompt,
   );
 
-  // const response = await openai.chat.completions.create({
-  //   model: "gpt-4o-mini", // vision + cheap for mvp
-  //   max_tokens: 100,
-  //   messages: [
-  //     {
-  //       role: "user",
-  //       content: [
-  //         {
-  //           type: "image_url",
-  //           image_url: { url: imageBase64, detail: "low" }, // 'low' = even cheaper
-  //         },
-  //         {
-  //           type: "text",
-  //           text: prompt.replace("${categoryName}", categoryName),
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // });
-
-  // const raw = response.choices[0].message.content ?? "{}";
+  // text analyzer
+  // const textPrompt = `
+  //   Imagine that I've sent you an image of an item in the category "${categoryName}".
+  //   Respond ONLY with a valid JSON object, no markdown, no explanation.
+  //   Format:
+  //   {
+  //     "name": "short descriptive name of the item",
+  //     "colorDesc": "human-readable color description (e.g. 'navy blue', 'forest green')",
+  //     "colorHex": "the dominant color as hex code (e.g. '#1B3A6B')"
+  //   }
+  // `;
+  // text analyzer
+  // const { description } = await aiService.analyzeText(textPrompt);
 
   // Clean response from ```json if the model decides to wrap it in a code block
   const clean = description.replace(/```json|```/g, "").trim();

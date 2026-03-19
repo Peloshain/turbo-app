@@ -4,6 +4,7 @@ export interface AIAnalysisResult {
 }
 
 export interface AIService {
+  analyzeText(prompt: string): Promise<AIAnalysisResult>;
   analyzeImage(
     base64: string,
     mimeType: string,
