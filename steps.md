@@ -69,8 +69,8 @@ pnpm prisma migrate dev
 
 ### Need to add the adapter to create the PrismaClient to avoid th error `PrismaClientInitializationError: `PrismaClient` needs to be constructed with a non-empty, valid 'PrismaClientOptions'`
 
-# Create AI package
-
+ <!-- # Create AI package
+ 
 ```sh
 mkdir -p packages/ai/src
 cd packages/ai
@@ -78,7 +78,7 @@ pnpm init
 pnpm add openai @anthropic-ai/sdk
 ```
 
-## Create `packages/ai/src/index.ts` with the AI configurations
+## Create `packages/ai/src/index.ts` with the AI configurations-->
 
 # Create Storage package
 
@@ -134,6 +134,21 @@ pnpm add -D tsx
 ```ts
 "dev": "bun run --hot src/index.ts"
 ```
+
+# AI Service (strategy/adapter)
+
+```text
+apps/api/src/
+  services/
+    ai/
+      types.ts          ← AIService
+      factory.ts        ← generate the adapter with .env variable
+      gemini.adapter.ts ← gemini implementation
+  routes/
+    analyze.ts          ← Hono route
+```
+
+## Create Interfaz `AIService`
 
 # Create Expo App (apps)
 

@@ -2,29 +2,27 @@ import "dotenv/config";
 import { Hono } from "hono";
 import { db } from "@repo/db";
 import { getUploadUrl, getPublicUrl } from "@repo/storage";
-import OpenAI from "openai";
+// import OpenAI from "openai";
+import { aiService, parseDataUrl } from "../services";
 
 let categoryName = "";
 
 export const itemsRouter = new Hono();
-const prompt = `Analiza esta prenda de ropa. Es de la categoría: ${categoryName}.
-                    Responde ÚNICAMENTE con un JSON válido, sin texto extra, con esta estructura:
-                    {
-                    "name": "nombre descriptivo corto de la prenda (máx 5 palabras)",
-                    "colorDesc": "descripción del color o patrón principal (máx 8 palabras)",
-                    "colorHex": "color HEX dominante de la prenda, ej: #2563EB"
-                    }`;
 
-const openai = new OpenAI({ apiKey: process.env.AI_API_KEY! });
+// const openai = new OpenAI({ apiKey: process.env.AI_API_KEY! });
 
 // Analize image before save
 itemsRouter.post("/analyze", async (c) => {
   const { imageBase64, categoryName } = await c.req.json<{
-    imageBase64: string; // "data:image/jpeg;base64,..."
-    categoryName: string; // "Shirts"
+    imageBase64: string;
+    categoryName: string;
   }>();
 
-  ///testing without AI
+  if (!imageBase64) {
+    return c.json({ error: "imageBase64 is required" }, 400);
+  }
+
+  //testing without AI
   if (process.env.NODE_ENV === "development") {
     return c.json({
       result: {
@@ -35,32 +33,56 @@ itemsRouter.post("/analyze", async (c) => {
       },
     });
   }
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini", // vision + cheap for mvp
-    max_tokens: 100,
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "image_url",
-            image_url: { url: imageBase64, detail: "low" }, // 'low' = even cheaper
-          },
-          {
-            type: "text",
-            text: prompt.replace("${categoryName}", categoryName),
-          },
-        ],
-      },
-    ],
-  });
 
-  const raw = response.choices[0].message.content ?? "{}";
+  if (!imageBase64) {
+    return c.json({ error: "imageBase64 is required" }, 400);
+  }
+
+  const { mimeType, base64 } = parseDataUrl(imageBase64);
+
+  const prompt = `
+    Analyze this image of an item in the category "${categoryName}".
+    Respond ONLY with a valid JSON object, no markdown, no explanation.
+    Format:
+    {
+      "name": "short descriptive name of the item",
+      "colorDesc": "human-readable color description (e.g. 'navy blue', 'forest green')",
+      "colorHex": "the dominant color as hex code (e.g. '#1B3A6B')"
+    }
+  `;
+
+  const { description } = await aiService.analyzeImage(
+    base64,
+    mimeType,
+    prompt,
+  );
+
+  // const response = await openai.chat.completions.create({
+  //   model: "gpt-4o-mini", // vision + cheap for mvp
+  //   max_tokens: 100,
+  //   messages: [
+  //     {
+  //       role: "user",
+  //       content: [
+  //         {
+  //           type: "image_url",
+  //           image_url: { url: imageBase64, detail: "low" }, // 'low' = even cheaper
+  //         },
+  //         {
+  //           type: "text",
+  //           text: prompt.replace("${categoryName}", categoryName),
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // });
+
+  // const raw = response.choices[0].message.content ?? "{}";
 
   // Clean response from ```json if the model decides to wrap it in a code block
-  const cleaned = raw.replace(/```json|```/g, "").trim();
+  const clean = description.replace(/```json|```/g, "").trim();
   try {
-    const result = JSON.parse(cleaned);
+    const result = JSON.parse(clean);
     return c.json({ ok: true, ...result });
   } catch {
     return c.json({ ok: false, error: "Failed to parse AI response" }, 500);
