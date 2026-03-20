@@ -11,13 +11,18 @@ app.use("*", cors());
 app.use("/uploads/*", serveStatic({ root: "./" }));
 
 app.put("/uploads/*", async (c) => {
-  console.log("here 44444");
+  console.log("[upload] path:", c.req.path);
+  console.log("[upload] provider:", process.env.STORAGE_PROVIDER);
+
   if (process.env.STORAGE_PROVIDER !== "local") {
     return c.json({ error: "Not available" }, 404);
   }
 
   const key = c.req.path.replace("/uploads/", "");
+  console.log("[upload] key:", key);
+
   const body = await c.req.arrayBuffer();
+  console.log("[upload] body size:", body.byteLength);
 
   await storageService.upload({
     key,
@@ -25,6 +30,7 @@ app.put("/uploads/*", async (c) => {
     mimeType: c.req.header("Content-Type") ?? "image/jpeg",
   });
 
+  console.log("[upload] done");
   return c.body(null, 200);
 });
 

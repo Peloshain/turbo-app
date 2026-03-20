@@ -17,7 +17,7 @@ import { CategoryPickerStep } from "../../components/add-item/CategoryPickerStep
 import { ConfirmStep } from "../../components/add-item/ConfirmStep";
 
 // Temporary hardcoded user — replace with real auth later
-const TEMP_USER_ID = "user_placeholder";
+const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
 
 export default function AddItemScreen() {
   const router = useRouter();

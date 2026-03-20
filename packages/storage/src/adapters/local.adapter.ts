@@ -1,5 +1,5 @@
 import { mkdir, writeFile, unlink } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import type { StorageService, UploadResult } from "../types";
 
 export class LocalAdapter implements StorageService {
@@ -27,7 +27,10 @@ export class LocalAdapter implements StorageService {
     mimeType: string;
   }): Promise<UploadResult> {
     const filePath = join(this.uploadDir, key);
-    const dir = filePath.substring(0, filePath.lastIndexOf("/"));
+    const dir = dirname(filePath);
+
+    console.log("[LocalAdapter] filePath:", filePath);
+    console.log("[LocalAdapter] dir:", dir);
 
     await mkdir(dir, { recursive: true });
     await writeFile(filePath, body);
