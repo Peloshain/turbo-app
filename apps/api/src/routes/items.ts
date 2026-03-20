@@ -1,11 +1,9 @@
 import "dotenv/config";
 import { Hono } from "hono";
 import { db } from "@repo/db";
-import { getUploadUrl, getPublicUrl } from "@repo/storage";
+import { storageService } from "@repo/storage";
 // import OpenAI from "openai";
 import { aiService, parseDataUrl } from "../services";
-
-let categoryName = "";
 
 export const itemsRouter = new Hono();
 
@@ -82,14 +80,15 @@ itemsRouter.post("/analyze", async (c) => {
   }
 });
 
-// Get url to upload image
 itemsRouter.post("/upload-url", async (c) => {
   const { key, contentType } = await c.req.json<{
     key: string;
     contentType: string;
   }>();
-  const url = await getUploadUrl(key, contentType);
-  return c.json({ url, publicUrl: getPublicUrl(key) });
+  const url = await storageService.getSignedUploadUrl(key, contentType);
+  const publicUrl = storageService.getUrl(key);
+
+  return c.json({ url, publicUrl });
 });
 
 // Save analized item
@@ -125,6 +124,7 @@ itemsRouter.get("/user/:userId", async (c) => {
 // Delete item
 itemsRouter.delete("/:id", async (c) => {
   const { id } = c.req.param();
+  // await storageService.delete(item.imageKey);
   await db.item.delete({ where: { id } });
   return c.json({ ok: true });
 });

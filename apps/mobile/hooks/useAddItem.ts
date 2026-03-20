@@ -1,5 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import { useState } from "react";
 import { Platform } from "react-native";
 
@@ -73,25 +73,37 @@ export function useAddItem() {
   async function saveItem(categoryId: string, userId: string) {
     if (!image || !analysis) return;
     setLoading(true);
-
     try {
       const key = `items/${userId}/${Date.now()}.jpg`;
+      console.log("here");
 
-      // 1. Pedir URL firmada
+      // Get Signed Url
       const urlRes = await fetch(`${API_URL}/items/upload-url`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key, contentType: "image/jpeg" }),
       });
       const { url, publicUrl } = await urlRes.json();
+      console.log(`URL: ${url}`);
+      console.log(`Public URL: ${publicUrl}`);
+      console.log(`image uri: ${image.uri}`);
+      // Upload directly to R2
+      // const imageBlob = await fetch(
+      //   `data:image/jpeg;base64,${image.base64}`,
+      // ).then((r) => r.blob()); // ← aquí
 
-      // 2. Subir imagen directo a R2 desde el cliente
+      // await fetch(url, {
+      //   method: "PUT",
+      //   headers: { "Content-Type": "image/jpeg" },
+      //   body: imageBlob,
+      // });
+
       await FileSystem.uploadAsync(url, image.uri, {
         httpMethod: "PUT",
         headers: { "Content-Type": "image/jpeg" },
       });
 
-      // 3. Guardar en DB
+      // Save into DB
       await fetch(`${API_URL}/items`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
