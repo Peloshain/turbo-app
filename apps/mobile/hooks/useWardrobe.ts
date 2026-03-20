@@ -24,6 +24,10 @@ export interface WardrobeItem {
 // Fetch all items for the current user, optionally filtered by category
 function fetchItems(categorySlug?: string): Promise<WardrobeItem[]> {
   const params = categorySlug ? `?categorySlug=${categorySlug}` : "";
+  console.log(`[fetchItems]: ${TEMP_USER_ID} ${params}`);
+
+  console.log(`[API URL]: ${API_URL}`);
+
   return fetch(`${API_URL}/items/user/${TEMP_USER_ID}${params}`)
     .then((r) => r.json())
     .then((d) => d.items);

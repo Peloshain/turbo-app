@@ -7,10 +7,8 @@ export function createStorageService(): StorageService {
 
   switch (provider) {
     case "local":
-      // const LocalUpload = process.env["LOCAL_UPLOAD_DIR"];
-      // const localBaseUrl = process.env["LOCAL_BASE_URL"];
-      const LocalUpload = "./uploads";
-      const localBaseUrl = "http://10.0.2.2:3000/uploads";
+      const LocalUpload = process.env["LOCAL_UPLOAD_DIR"];
+      const localBaseUrl = process.env["LOCAL_BASE_URL"];
 
       return new LocalAdapter(LocalUpload, localBaseUrl);
 

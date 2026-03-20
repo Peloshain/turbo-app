@@ -109,6 +109,7 @@ itemsRouter.get("/user/:userId", async (c) => {
   const { userId } = c.req.param();
   const { categorySlug } = c.req.query();
 
+  console.log(`[item request]: ${userId} ${categorySlug}`);
   const items = await db.item.findMany({
     where: {
       userId,
@@ -117,6 +118,8 @@ itemsRouter.get("/user/:userId", async (c) => {
     include: { category: true },
     orderBy: { createdAt: "desc" },
   });
+
+  console.log(`[item request Items]: ${items}`);
 
   return c.json({ items });
 });
