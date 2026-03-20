@@ -1,29 +1,220 @@
-import { View, Text, StyleSheet } from "react-native";
+import { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  useOutfitGenerator,
+  Occasion,
+  Weather,
+} from "../../hooks/useOutfitGenerator";
+import { OccasionPicker } from "../../components/outfit/OccasionPicker";
+import { OutfitResult } from "../../components/outfit/OutfitResult";
 
 export default function OutfitScreen() {
+  const insets = useSafeAreaInsets();
+  const [occasion, setOccasion] = useState<Occasion | null>(null);
+  const [weather, setWeather] = useState<Weather | null>(null);
+
+  const {
+    result,
+    savedId,
+    isGenerating,
+    isSaving,
+    error,
+    generate,
+    save,
+    reset,
+  } = useOutfitGenerator();
+
+  function handleGenerate() {
+    generate({
+      occasion: occasion ?? undefined,
+      weather: weather ?? undefined,
+    });
+  }
+
+  function handleSave() {
+    if (!result) return;
+    save({ ...result, occasion: occasion ?? undefined });
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.empty}>Add clothing items to build an outfit</Text>
-      <Text style={styles.hint}>
-        With at least 3 pieces, AI can create outfits for you
-      </Text>
-    </View>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={[
+        styles.content,
+        { paddingBottom: insets.bottom + 24 },
+      ]}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* ── Filters section — always visible ── */}
+      <View style={styles.filtersSection}>
+        <Text style={styles.sectionTitle}>Build an outfit</Text>
+        <Text style={styles.sectionSubtitle}>
+          Choose a context or leave blank for a surprise
+        </Text>
+
+        <OccasionPicker
+          occasion={occasion}
+          weather={weather}
+          onOccasionChange={setOccasion}
+          onWeatherChange={setWeather}
+        />
+
+        {/* Generate button */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.generateButton,
+            isGenerating && styles.generateButtonDisabled,
+            pressed && !isGenerating && styles.generateButtonPressed,
+          ]}
+          onPress={handleGenerate}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <View style={styles.loadingRow}>
+              <ActivityIndicator color="#FFFFFF" size="small" />
+              <Text style={styles.generateButtonText}>AI is styling...</Text>
+            </View>
+          ) : (
+            <Text style={styles.generateButtonText}>
+              {result ? "🔄 Regenerate" : "✨ Generate outfit"}
+            </Text>
+          )}
+        </Pressable>
+      </View>
+
+      {/* ── Error state ── */}
+      {error && (
+        <View style={styles.errorCard}>
+          <Text style={styles.errorText}>⚠️ {error}</Text>
+        </View>
+      )}
+
+      {/* ── Generated outfit result ── */}
+      {result && !isGenerating && (
+        <View style={styles.resultSection}>
+          <OutfitResult
+            outfit={result}
+            isSaving={isSaving}
+            savedId={savedId}
+            onSave={handleSave}
+            onRegenerate={handleGenerate}
+          />
+        </View>
+      )}
+
+      {/* ── Empty state — no result yet ── */}
+      {!result && !isGenerating && !error && (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyEmoji}>🪄</Text>
+          <Text style={styles.emptyTitle}>AI stylist ready</Text>
+          <Text style={styles.emptySubtitle}>
+            Pick an occasion and weather above, or tap Generate for a surprise
+            outfit from your wardrobe
+          </Text>
+        </View>
+      )}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#FAFAF9",
   },
-  empty: { fontSize: 16, fontWeight: "600", color: "#1C1C1E" },
-  hint: {
-    fontSize: 13,
+  content: {
+    padding: 20,
+    gap: 24,
+  },
+
+  // ── Filters section
+  filtersSection: {
+    gap: 14,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1C1C1E",
+  },
+  sectionSubtitle: {
+    fontSize: 14,
     color: "#8E8E93",
-    marginTop: 6,
+    marginTop: -8,
+    lineHeight: 19,
+  },
+
+  // ── Generate button
+  generateButton: {
+    backgroundColor: "#1C1C1E",
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 4,
+  },
+  generateButtonDisabled: {
+    opacity: 0.7,
+  },
+  generateButtonPressed: {
+    opacity: 0.85,
+  },
+  generateButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  loadingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+
+  // ── Error
+  errorCard: {
+    backgroundColor: "#FFF2F2",
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: "#FFCDD2",
+  },
+  errorText: {
+    fontSize: 14,
+    color: "#DC2626",
+    lineHeight: 19,
+  },
+
+  // ── Result section
+  resultSection: {
+    gap: 0,
+  },
+
+  // ── Empty state
+  emptyState: {
+    alignItems: "center",
+    paddingTop: 40,
+    gap: 10,
+    paddingHorizontal: 20,
+  },
+  emptyEmoji: {
+    fontSize: 52,
+    marginBottom: 6,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1C1C1E",
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: "#8E8E93",
     textAlign: "center",
-    paddingHorizontal: 40,
+    lineHeight: 20,
   },
 });

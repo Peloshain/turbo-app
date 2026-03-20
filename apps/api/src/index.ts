@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { itemsRouter } from "./routes/items";
 import { categoriesRouter } from "./routes/categories";
 import { storageService } from "@repo/storage";
+import { outfitsRouter } from "./routes/outfits";
 
 const app = new Hono();
 
@@ -36,6 +37,7 @@ app.put("/uploads/*", async (c) => {
 
 app.route("/items", itemsRouter);
 app.route("/categories", categoriesRouter);
+app.route("/outfits", outfitsRouter);
 
 // Health check
 app.get("/", (c) => c.json({ status: "ok" }));
