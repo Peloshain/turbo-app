@@ -28,3 +28,7 @@ apps/mobile/.expo-shared
 
 # typescript
 *.tsbuildinfo
+
+#files
+*.jpg
+*.png

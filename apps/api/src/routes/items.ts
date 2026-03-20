@@ -121,6 +121,17 @@ itemsRouter.get("/user/:userId", async (c) => {
   return c.json({ items });
 });
 
+// Get single item by id — used by the detail screen
+itemsRouter.get("/:id", async (c) => {
+  const { id } = c.req.param();
+  const item = await db.item.findUnique({
+    where: { id },
+    include: { category: true },
+  });
+  if (!item) return c.json({ error: "Not found" }, 404);
+  return c.json({ item });
+});
+
 // Delete item
 itemsRouter.delete("/:id", async (c) => {
   const { id } = c.req.param();

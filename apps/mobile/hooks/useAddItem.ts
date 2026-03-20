@@ -9,6 +9,7 @@ const API_URL = Platform.select({
   ios: process.env.EXPO_PUBLIC_API_URL,
 });
 
+//move to model src
 export type AnalysisResult = {
   name: string;
   colorDesc: string;
