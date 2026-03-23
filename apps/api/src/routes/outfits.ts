@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { db } from "@repo/db";
 import OpenAI from "openai";
+import { aiService } from "../services";
 
 export const outfitsRouter = new Hono();
 
@@ -38,6 +39,22 @@ outfitsRouter.post("/generate", async (c) => {
     )
     .join("\n");
 
+  // ─── AI guard ─────────────────────────────────────────────
+  if (process.env.AI_ENABLED !== "true") {
+    const shuffled = items.sort(() => Math.random() - 0.5);
+    const picked = shuffled.slice(0, Math.min(3, items.length));
+    return c.json({
+      ok: true,
+      outfit: {
+        itemIds: picked.map((i) => i.id),
+        outfitName: "Mock Outfit",
+        reason: "AI is disabled — random items selected for testing.",
+        styleNote: "Enable AI_ENABLED=true to get real suggestions.",
+        items: picked,
+      },
+    });
+  }
+
   // Build context string based on optional filters
   const contextParts: string[] = [];
   if (occasion) contextParts.push(`occasion: ${occasion}`);
@@ -67,14 +84,8 @@ Respond ONLY with valid JSON, no extra text:
   "styleNote": "one practical tip on how to wear this outfit"
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    max_tokens: 300,
-    temperature: 0.8, // Slightly creative — different results each time
-    messages: [{ role: "user", content: prompt }],
-  });
+  const { description: raw } = await aiService.analyzeText(prompt);
 
-  const raw = response.choices[0].message.content ?? "{}";
   const cleaned = raw.replace(/```json|```/g, "").trim();
 
   let parsed: {

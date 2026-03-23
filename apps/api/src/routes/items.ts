@@ -20,12 +20,12 @@ itemsRouter.post("/analyze", async (c) => {
     return c.json({ error: "imageBase64 is required" }, 400);
   }
 
-  // testing without AI
-  if (process.env.NODE_ENV === "development") {
+  // ─── AI guard ─────────────────────────────────────────────
+  if (process.env.AI_ENABLED !== "true") {
     return c.json({
       result: {
         ok: true,
-        name: "test",
+        name: "Mock Item",
         colorDesc: "Green",
         colorHex: "#1F8508",
       },

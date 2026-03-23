@@ -12,7 +12,7 @@ export class GeminiAdapter implements AIService {
   async analyzeText(prompt: string): Promise<AIAnalysisResult> {
     const model = this.client.getGenerativeModel({ model: this.model });
 
-    const result = await model.generateContent([prompt]);
+    const result = await model.generateContent(prompt);
 
     return {
       description: result.response.text(),
