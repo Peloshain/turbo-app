@@ -1,10 +1,43 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl, Text } from "react-native";
+import { useSavedOutfits } from "../../hooks/useSavedOutfits";
+import { OutfitCard } from "../../components/saved/OutfitCard";
+import { EmptyOutfits } from "../../components/saved/EmptyOutfits";
 
 export default function SavedScreen() {
+  const {
+    data: outfits = [],
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useSavedOutfits();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.empty}>No saved outfits</Text>
-      <Text style={styles.hint}>The outfits you save will appear here</Text>
+      <FlatList
+        data={outfits}
+        keyExtractor={(outfit) => outfit.id}
+        contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            tintColor="#1C1C1E"
+          />
+        }
+        // Outfit count header
+        ListHeaderComponent={
+          outfits.length > 0 ? (
+            <Text style={styles.countLabel}>
+              {outfits.length} {outfits.length === 1 ? "outfit" : "outfits"}{" "}
+              saved
+            </Text>
+          ) : null
+        }
+        ListEmptyComponent={!isLoading ? <EmptyOutfits /> : null}
+        renderItem={({ item }) => <OutfitCard outfit={item} />}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
     </View>
   );
 }
@@ -12,16 +45,19 @@ export default function SavedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#FAFAF9",
   },
-  empty: { fontSize: 16, fontWeight: "600", color: "#1C1C1E" },
-  hint: {
-    fontSize: 13,
+  list: {
+    padding: 16,
+    flexGrow: 1,
+  },
+  countLabel: {
+    fontSize: 12,
     color: "#8E8E93",
-    marginTop: 6,
-    textAlign: "center",
-    paddingHorizontal: 40,
+    fontWeight: "500",
+    marginBottom: 14,
+  },
+  separator: {
+    height: 14,
   },
 });
