@@ -4,13 +4,15 @@ import { R2Adapter } from "./adapters/r2.adapter";
 
 export function createStorageService(): StorageService {
   const provider = process.env.STORAGE_PROVIDER ?? "local";
-
+  console.log(`[Factory] STORAGE_PROVIDER: ${provider}`);
   switch (provider) {
     case "local":
-      const LocalUpload = process.env["LOCAL_UPLOAD_DIR"];
-      const localBaseUrl = process.env["LOCAL_BASE_URL"];
-
-      return new LocalAdapter(LocalUpload, localBaseUrl);
+      console.log(`[Factory] LocalUpload: ${process.env.LOCAL_UPLOAD_DIR}`);
+      console.log(`[Factory] localBaseUrl: ${process.env.LOCAL_BASE_URL}`);
+      return new LocalAdapter(
+        process.env.LOCAL_UPLOAD_DIR,
+        process.env.LOCAL_BASE_URL,
+      );
 
     case "r2":
       return new R2Adapter({

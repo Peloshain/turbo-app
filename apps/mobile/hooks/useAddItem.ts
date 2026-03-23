@@ -8,7 +8,6 @@ const API_URL = Platform.select({
   android: "http://10.0.2.2:3000",
   ios: process.env.EXPO_PUBLIC_API_URL,
 });
-
 //move to model src
 export type AnalysisResult = {
   name: string;
@@ -76,7 +75,6 @@ export function useAddItem() {
     setLoading(true);
     try {
       const key = `items/${userId}/${Date.now()}.jpg`;
-      console.log("here");
 
       // Get Signed Url
       const urlRes = await fetch(`${API_URL}/items/upload-url`, {

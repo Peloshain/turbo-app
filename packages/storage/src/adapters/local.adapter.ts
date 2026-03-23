@@ -10,8 +10,9 @@ export class LocalAdapter implements StorageService {
     uploadDir = "./uploads",
     baseUrl = "http://localhost:3000/uploads",
   ) {
-    console.log(uploadDir);
-    console.log(baseUrl);
+    console.log(`[LocalAdapter] uploadDir: ${uploadDir}`);
+    console.log(`[LocalAdapter] baseUrl: ${baseUrl}`);
+
     this.uploadDir = uploadDir;
     this.baseUrl = baseUrl;
     console.log("running local storage");
@@ -47,6 +48,7 @@ export class LocalAdapter implements StorageService {
   }
 
   async getSignedUploadUrl(key: string, _mimeType: string): Promise<string> {
+    console.log(`[baseUrl]: ${this.baseUrl}`);
     return `${this.baseUrl}/${key}`;
   }
 }

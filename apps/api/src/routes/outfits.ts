@@ -4,7 +4,7 @@ import OpenAI from "openai";
 
 export const outfitsRouter = new Hono();
 
-const openai = new OpenAI({ apiKey: process.env.AI_API_KEY! });
+// const openai = new OpenAI({ apiKey: process.env.AI_API_KEY! });
 
 // ─── Types ────────────────────────────────────────────────
 

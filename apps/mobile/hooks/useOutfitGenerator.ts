@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
-const TEMP_USER_ID = "user_placeholder";
+const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
 
 export type Occasion = "casual" | "work" | "formal" | "sport";
 export type Weather = "hot" | "mild" | "cold";
