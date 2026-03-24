@@ -119,7 +119,8 @@ itemsRouter.get("/user/:userId", async (c) => {
     orderBy: { createdAt: "desc" },
   });
 
-  console.log(`[item request Items]: ${items}`);
+  console.log(`[item request Items]`);
+  console.log(items);
 
   return c.json({ items });
 });

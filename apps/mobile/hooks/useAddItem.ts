@@ -1,7 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { useState } from "react";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 
 //Useful for Android emulator
 const API_URL = Platform.select({
@@ -23,13 +23,48 @@ export function useAddItem() {
     "pick",
   );
 
+  // Request the appropriate permission before launching camera or gallery.
+  // Returns true if granted, false if denied.
+  async function requestPermission(
+    source: "camera" | "gallery",
+  ): Promise<boolean> {
+    if (source === "camera") {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      return status === "granted";
+    } else {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      return status === "granted";
+    }
+  }
+
   async function pickImage(source: "camera" | "gallery") {
+    const granted = await requestPermission(source);
+
+    if (!granted) {
+      Alert.alert(
+        "Permission required",
+        source === "camera"
+          ? "Please allow camera access in your device settings to take photos."
+          : "Please allow photo library access in your device settings.",
+        [{ text: "OK" }],
+      );
+      return;
+    }
+
     const result =
       source === "camera"
-        ? await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true })
+        ? await ImagePicker.launchCameraAsync({
+            quality: 0.7,
+            base64: true,
+            allowsEditing: true, // Lets user crop to square — cleaner item photos
+            aspect: [3, 4], // Portrait ratio works best for clothing
+          })
         : await ImagePicker.launchImageLibraryAsync({
             quality: 0.7,
             base64: true,
+            allowsEditing: true,
+            aspect: [3, 4],
           });
 
     if (!result.canceled) {

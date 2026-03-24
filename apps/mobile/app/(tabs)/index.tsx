@@ -6,6 +6,8 @@ import { CategoryFilter } from "../../components/wardrobe/CategoryFilter";
 import { SearchBar } from "../../components/wardrobe/SearchBar";
 import { ItemCard } from "../../components/wardrobe/ItemCard";
 import { EmptyState } from "../../components/wardrobe/EmptyState";
+import { ErrorCard } from "../../components/ui/ErrorCard";
+import { SkeletonCard } from "../../components/ui/SkeletonCard";
 
 export default function WardrobeScreen() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -15,6 +17,7 @@ export default function WardrobeScreen() {
   const {
     data: items = [],
     isLoading,
+    isError,
     refetch,
     isRefetching,
   } = useWardrobeItems(selectedCategory ?? undefined);
@@ -59,25 +62,38 @@ export default function WardrobeScreen() {
       )}
 
       {/* Grid */}
-      <FlatList
-        data={filtered}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        contentContainerStyle={styles.grid}
-        columnWrapperStyle={styles.row}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={refetch}
-            tintColor="#1C1C1E"
-          />
-        }
-        ListEmptyComponent={
-          !isLoading ? <EmptyState isFiltered={isFiltered} /> : null
-        }
-        renderItem={({ item }) => <ItemCard item={item} />}
-      />
+      {isError ? (
+        <ErrorCard
+          message="Could not load your wardrobe. Check your connection."
+          onRetry={refetch}
+        />
+      ) : isLoading ? (
+        <View style={styles.skeletonGrid}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </View>
+      ) : (
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          contentContainerStyle={styles.grid}
+          columnWrapperStyle={styles.row}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={refetch}
+              tintColor="#1C1C1E"
+            />
+          }
+          ListEmptyComponent={
+            !isLoading ? <EmptyState isFiltered={isFiltered} /> : null
+          }
+          renderItem={({ item }) => <ItemCard item={item} />}
+        />
+      )}
     </View>
   );
 }
@@ -101,5 +117,12 @@ const styles = StyleSheet.create({
   row: {
     gap: 10,
     marginBottom: 10,
+  },
+  skeletonGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
 });
