@@ -1,0 +1,24 @@
+{
+  "name": "@repo/auth-expo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.3",
+  "dependencies": {
+    "@repo/auth-core": "workspace:*",
+    "@better-auth/expo": "latest",
+    "expo-secure-store": "*",
+    "expo-web-browser": "*",
+    "expo-auth-session": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/react": "*"
+  }
+}
