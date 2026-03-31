@@ -110,9 +110,14 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  packages/auth-client: {}
-
-  packages/auth-server: {}
+  packages/auth-server:
+    dependencies:
+      '@repo/auth-core':
+        specifier: workspace:*
+        version: link:../auth
+      hono:
+        specifier: latest
+        version: 4.12.9
 
   packages/db:
     dependencies:
@@ -2906,6 +2911,10 @@ packages:
 
   hono@4.12.7:
     resolution: {integrity: sha512-jq9l1DM0zVIvsm3lv9Nw9nlJnMNPOcAtsbsgiUhWcFzPE99Gvo6yRTlszSLLYacMeQ6quHD6hMfId8crVHvexw==}
+    engines: {node: '>=16.9.0'}
+
+  hono@4.12.9:
+    resolution: {integrity: sha512-wy3T8Zm2bsEvxKZM5w21VdHDDcwVS1yUFFY6i8UobSsKfFceT7TOwhbhfKsDyx7tYQlmRM5FLpIuYvNFyjctiA==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@7.0.2:
@@ -7849,6 +7858,8 @@ snapshots:
   hono@4.11.4: {}
 
   hono@4.12.7: {}
+
+  hono@4.12.9: {}
 
   hosted-git-info@7.0.2:
     dependencies:
