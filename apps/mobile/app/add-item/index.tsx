@@ -16,8 +16,14 @@ import { ImagePickerStep } from "../../components/add-item/ImagePickerStep";
 import { CategoryPickerStep } from "../../components/add-item/CategoryPickerStep";
 import { ConfirmStep } from "../../components/add-item/ConfirmStep";
 
+import { useSession } from "@repo/auth-expo";
+
 // Temporary hardcoded user — replace with real auth later
 const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
+
+const { user } = useSession();
+
+console.log("Current user:", user);
 
 export default function AddItemScreen() {
   const router = useRouter();

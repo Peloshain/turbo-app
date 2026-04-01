@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
+import { AuthProvider } from "@repo/auth-expo";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -83,21 +84,49 @@ export default function RootLayout() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider>
-          <StatusBar style="dark" />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="add-item/index"
-              options={{ presentation: "modal", headerShown: false }}
-            />
-            <Stack.Screen
-              name="item/[id]"
-              options={{ headerTitle: "Item", headerBackTitle: "Back" }}
-            />
-          </Stack>
-        </SafeAreaProvider>
+        <AuthProvider>
+          <SafeAreaProvider>
+            <StatusBar style="dark" />
+            <Stack screenOptions={{ headerShown: false }}>
+              {/* Auth gate — decides which group to show */}
+              <Stack.Screen name="index" />
+
+              {/* Unauthenticated screens */}
+              <Stack.Screen name="(auth)" />
+
+              {/* Authenticated screens */}
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen
+                name="add-item/index"
+                options={{ presentation: "modal" }}
+              />
+              <Stack.Screen
+                name="item/[id]"
+                options={{
+                  headerShown: true,
+                  headerTitle: "Item",
+                  headerBackTitle: "Back",
+                }}
+              />
+            </Stack>
+          </SafeAreaProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
 }
+
+// const s = StyleSheet.create({
+//   errContainer: {
+//     flex: 1, alignItems: 'center', justifyContent: 'center',
+//     padding: 32, backgroundColor: '#FAFAF9', gap: 12,
+//   },
+//   errEmoji: { fontSize: 48 },
+//   errTitle: { fontSize: 20, fontWeight: '700', color: '#1C1C1E' },
+//   errMsg: { fontSize: 14, color: '#8E8E93', textAlign: 'center', lineHeight: 20 },
+//   errButton: {
+//     marginTop: 8, backgroundColor: '#1C1C1E',
+//     paddingHorizontal: 28, paddingVertical: 13, borderRadius: 25,
+//   },
+//   errButtonText: { color: '#FFFFFF', fontWeight: '600', fontSize: 15 },
+// })
