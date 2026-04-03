@@ -36,7 +36,9 @@
           "photosPermission": "Wardrobe needs access to your photos to add clothing items.",
           "cameraPermission": "Wardrobe needs camera access to photograph your clothing."
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-web-browser"
     ]
   }
 }

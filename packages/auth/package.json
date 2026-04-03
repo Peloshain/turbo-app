@@ -1,0 +1,33 @@
+{
+  "name": "@repo/auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./server": {
+      "import": "./src/server.ts"
+    },
+    "./client": {
+      "import": "./src/client.ts"
+    },
+    "./env": {
+      "import": "./src/env.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.3",
+  "dependencies": {
+    "@better-auth/expo": "^1.5.6",
+    "@repo/db": "workspace:*",
+    "better-auth": "^1.5.6",
+    "expo-secure-store": "^55.0.11"
+  }
+}

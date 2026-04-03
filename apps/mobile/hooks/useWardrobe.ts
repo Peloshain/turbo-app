@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { authClient } from "../src/auth/client";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -21,6 +22,21 @@ export interface WardrobeItem {
   };
 }
 
+// Helper that adds the session cookie to every request.
+// Better Auth on Expo uses cookies stored in SecureStore — not Bearer tokens.
+async function authedFetch(url: string, options: RequestInit = {}) {
+  const cookies = authClient.getCookie();
+  return fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+      // Inject the session cookie from SecureStore
+      ...(cookies ? { Cookie: cookies } : {}),
+    },
+  });
+}
+
 // Fetch all items for the current user, optionally filtered by category
 function fetchItems(categorySlug?: string): Promise<WardrobeItem[]> {
   const params = categorySlug ? `?categorySlug=${categorySlug}` : "";
@@ -34,6 +50,13 @@ function fetchItems(categorySlug?: string): Promise<WardrobeItem[]> {
 }
 
 export function useWardrobeItems(categorySlug?: string) {
+  const { data: session } = authClient.useSession();
+  const userId = session?.user.id;
+
+  console.log(
+    `[useWardrobeItems] userId: ${userId}, categorySlug: ${categorySlug}`,
+  );
+
   return useQuery({
     queryKey: ["wardrobe", categorySlug],
     queryFn: () => fetchItems(categorySlug),

@@ -5,6 +5,7 @@ import { itemsRouter } from "./routes/items";
 import { categoriesRouter } from "./routes/categories";
 import { storageService } from "@repo/storage";
 import { outfitsRouter } from "./routes/outfits";
+import { authRouter, withAuth } from "./auth";
 
 const app = new Hono();
 
@@ -35,6 +36,10 @@ app.put("/uploads/*", async (c) => {
   return c.body(null, 200);
 });
 
+app.route("/", authRouter);
+
+app.use("/items/*", withAuth);
+app.use("/outfits/*", withAuth);
 app.route("/items", itemsRouter);
 app.route("/categories", categoriesRouter);
 app.route("/outfits", outfitsRouter);

@@ -106,6 +106,9 @@ itemsRouter.post("/", async (c) => {
 
 // User items by user
 itemsRouter.get("/user/:userId", async (c) => {
+  console.log("[itemsRouter] withAuth");
+  const user = c.get("user");
+  console.log("[withAuth] user:", user);
   const { userId } = c.req.param();
   const { categorySlug } = c.req.query();
 
