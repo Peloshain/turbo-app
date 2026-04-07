@@ -22,13 +22,20 @@ export function useAuth() {
     password: string,
     name: string,
   ) {
+    console.log("[useAuth] signUpWithEmail called with", {
+      email,
+      password,
+      name,
+    });
     const { data, error } = await authClient.signUp.email({
       email,
       password,
       name,
       callbackURL: "/(tabs)",
     });
+    console.log("[useAuth] signUpWithEmail error", { error });
     if (error) return { ok: false, error: error.message };
+
     return { ok: true, data };
   }
 

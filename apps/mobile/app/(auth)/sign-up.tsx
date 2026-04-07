@@ -53,7 +53,11 @@ export default function SignUpScreen() {
     setLoading(true);
     setError(null);
 
+    console.log("Signing up with", { name, email, password });
+
     const result = await signUpWithEmail(email, password, name.trim());
+
+    console.log("Sign up result", result);
 
     if (!result.ok) {
       setError(result.error ?? "Something went wrong");
