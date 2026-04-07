@@ -11,12 +11,16 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.5.6",
+    "@expo-google-fonts/dm-sans": "^0.4.2",
+    "@expo-google-fonts/dm-serif-display": "^0.4.2",
+    "@repo/auth": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
     "better-auth": "^1.5.6",
     "expo": "~55.0.6",
     "expo-auth-session": "~55.0.12",
     "expo-constants": "~55.0.8",
     "expo-file-system": "~55.0.11",
+    "expo-font": "~55.0.6",
     "expo-image-picker": "~55.0.13",
     "expo-linking": "~55.0.7",
     "expo-network": "~55.0.11",
@@ -27,8 +31,7 @@
     "react": "19.2.0",
     "react-native": "0.83.2",
     "react-native-safe-area-context": "~5.6.2",
-    "react-native-screens": "~4.23.0",
-    "@repo/auth": "workspace:*"
+    "react-native-screens": "~4.23.0"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",

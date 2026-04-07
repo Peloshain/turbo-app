@@ -1,9 +1,11 @@
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { authClient } from "../src/auth/client";
+import { useAppFonts } from "../src/lib/fonts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +17,30 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Redirects unauthenticated users to sign-in and
+// authenticated users away from auth screens.
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const segments = useSegments();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (isPending) return; // Wait until session is resolved
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (!session && !inAuthGroup) {
+      // Not logged in and not on an auth screen → go to sign in
+      router.replace("/(auth)/sign-in");
+    } else if (session && inAuthGroup) {
+      // Logged in but still on an auth screen → go to app
+      router.replace("/(tabs)");
+    }
+  }, [session, isPending, segments]);
+
+  return <>{children}</>;
+}
 
 // Simple class-based error boundary — hooks can't catch render errors
 class ErrorBoundary extends React.Component<
@@ -80,22 +106,30 @@ const boundaryStyles = StyleSheet.create({
 });
 
 export default function RootLayout() {
+  const [fontsLoaded] = useAppFonts();
+
+  // Block render until fonts are ready — avoids FOUT on first frame
+  if (!fontsLoaded)
+    return <View style={{ flex: 1, backgroundColor: "#FAFAF9" }} />;
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <StatusBar style="dark" />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="add-item/index"
-              options={{ presentation: "modal", headerShown: false }}
-            />
-            <Stack.Screen
-              name="item/[id]"
-              options={{ headerTitle: "Item", headerBackTitle: "Back" }}
-            />
-          </Stack>
+          <AuthGate>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="add-item/index"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+              <Stack.Screen
+                name="item/[id]"
+                options={{ headerTitle: "Item", headerBackTitle: "Back" }}
+              />
+            </Stack>
+          </AuthGate>
         </SafeAreaProvider>
       </QueryClientProvider>
     </ErrorBoundary>
