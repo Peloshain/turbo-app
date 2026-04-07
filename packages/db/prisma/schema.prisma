@@ -12,53 +12,98 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+  items    Item[]
+  outfits  Outfit[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model Category {
-  id    String @id @default(uuid()) @db.Uuid
+  id    String @id @default(uuid())
   name  String @unique
   slug  String @unique
+  icon  String
   order Int    @default(0)
   items Item[]
 }
 
-model User {
-  id        String   @id @default(uuid()) @db.Uuid 
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  items     Item[]
-  outfits   Outfit[]
-}
-
 model Item {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String                      
+  id          String   @id @default(uuid())
+  name        String
   imageUrl    String
   imageKey    String   @unique
-  colorDesc   String                     
-  colorHex    String?                 
-  categoryId  String   @db.Uuid
+  colorDesc   String
+  colorHex    String?
+  categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
-  userId      String   @db.Uuid
+  userId      String
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   outfitItems OutfitItem[]
 }
 
 model Outfit {
-  id          String      @id @default(uuid()) @db.Uuid
+  id          String   @id @default(uuid())
   name        String?
   occasion    String?
-  aiGenerated Boolean     @default(false)
-  userId      String      @db.Uuid
-  user        User        @relation(fields: [userId], references: [id])
+  aiGenerated Boolean  @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
   items       OutfitItem[]
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime @default(now())
 }
 
 model OutfitItem {
-  id       String @id @default(uuid()) @db.Uuid
-  outfitId String @db.Uuid
+  id       String @id @default(uuid())
+  outfitId String
   outfit   Outfit @relation(fields: [outfitId], references: [id], onDelete: Cascade)
-  itemId   String @db.Uuid
+  itemId   String
   item     Item   @relation(fields: [itemId], references: [id])
 }
