@@ -4,6 +4,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
+import { authClient } from "../lib/auth-client";
+
+// const { data: session } = authClient.useSession();
+
+// console.log("Current session:", session);
 
 const queryClient = new QueryClient({
   defaultOptions: {
