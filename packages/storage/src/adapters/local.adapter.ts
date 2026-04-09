@@ -6,10 +6,7 @@ export class LocalAdapter implements StorageService {
   private uploadDir: string;
   private baseUrl: string;
 
-  constructor(
-    uploadDir = "./uploads",
-    baseUrl = "http://localhost:3000/uploads",
-  ) {
+  constructor(uploadDir = "./uploads", baseUrl: string) {
     console.log(`[LocalAdapter] uploadDir: ${uploadDir}`);
     console.log(`[LocalAdapter] baseUrl: ${baseUrl}`);
 

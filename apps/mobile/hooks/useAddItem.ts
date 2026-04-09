@@ -2,11 +2,12 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { useState } from "react";
 import { Alert, Platform } from "react-native";
+import { env } from "@repo/env/native";
 
 //Useful for Android emulator
 const API_URL = Platform.select({
   android: "http://10.0.2.2:3000",
-  ios: process.env.EXPO_PUBLIC_API_URL,
+  ios: env.EXPO_PUBLIC_SERVER_URL,
 });
 //move to model src
 export type AnalysisResult = {

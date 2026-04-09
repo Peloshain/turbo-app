@@ -4,10 +4,11 @@ import { db } from "@repo/db";
 import { storageService } from "@repo/storage";
 // import OpenAI from "openai";
 import { aiService, parseDataUrl } from "../services";
+import { env } from "@repo/env/server";
 
 export const itemsRouter = new Hono();
 
-// const openai = new OpenAI({ apiKey: process.env.AI_API_KEY! });
+// const openai = new OpenAI({ apiKey: .AI_API_KEY! });
 
 // Analize image before save
 itemsRouter.post("/analyze", async (c) => {
@@ -21,7 +22,7 @@ itemsRouter.post("/analyze", async (c) => {
   }
 
   // ─── AI guard ─────────────────────────────────────────────
-  if (process.env.AI_ENABLED !== "true") {
+  if (env.AI_ENABLED === "false") {
     return c.json({
       result: {
         ok: true,
@@ -50,11 +51,10 @@ itemsRouter.post("/analyze", async (c) => {
     }
   `;
 
-  const { description } = await aiService.analyzeImage(
-    base64,
-    mimeType,
-    prompt,
-  );
+  const { description } =
+    base64 && mimeType
+      ? await aiService.analyzeImage(base64, mimeType, prompt)
+      : { description: "" };
 
   // text analyzer
   // const textPrompt = `

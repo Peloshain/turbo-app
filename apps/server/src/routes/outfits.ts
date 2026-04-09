@@ -2,10 +2,11 @@ import { Hono } from "hono";
 import { db } from "@repo/db";
 import OpenAI from "openai";
 import { aiService } from "../services";
+import { env } from "@repo/env/server";
 
 export const outfitsRouter = new Hono();
 
-// const openai = new OpenAI({ apiKey: process.env.AI_API_KEY! });
+// const openai = new OpenAI({ apiKey: env.AI_API_KEY! });
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -40,7 +41,7 @@ outfitsRouter.post("/generate", async (c) => {
     .join("\n");
 
   // ─── AI guard ─────────────────────────────────────────────
-  if (process.env.AI_ENABLED !== "true") {
+  if (env.AI_ENABLED !== "true") {
     const shuffled = items.sort(() => Math.random() - 0.5);
     const picked = shuffled.slice(0, Math.min(3, items.length));
     return c.json({

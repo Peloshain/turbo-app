@@ -5,6 +5,7 @@ import { itemsRouter } from "./routes/items";
 import { categoriesRouter } from "./routes/categories";
 import { storageService } from "@repo/storage";
 import { outfitsRouter } from "./routes/outfits";
+import { env } from "@repo/env/server";
 
 const app = new Hono();
 
@@ -13,9 +14,9 @@ app.use("/uploads/*", serveStatic({ root: "./" }));
 
 app.put("/uploads/*", async (c) => {
   console.log("[upload] path:", c.req.path);
-  console.log("[upload] provider:", process.env.STORAGE_PROVIDER);
+  console.log("[upload] provider:", env.STORAGE_PROVIDER);
 
-  if (process.env.STORAGE_PROVIDER !== "local") {
+  if (env.STORAGE_PROVIDER !== "local") {
     return c.json({ error: "Not available" }, 404);
   }
 

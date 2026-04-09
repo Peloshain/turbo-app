@@ -17,6 +17,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@repo/config": "workspace:*",
     "@types/node": "^25.5.0",
     "turbo": "^2.8.16",
     "typescript": "catalog:"
