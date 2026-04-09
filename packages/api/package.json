@@ -1,0 +1,24 @@
+{
+  "name": "@repo/api",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
+    "dotenv": "catalog:",
+    "@orpc/client": "catalog:",
+    "@orpc/server": "catalog:"
+  },
+  "devDependencies": {
+    "hono": "catalog:",
+    "typescript": "catalog:"
+  }
+}

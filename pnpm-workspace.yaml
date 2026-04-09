@@ -1,3 +1,13 @@
 packages:
   - "apps/*"
   - "packages/*"
+catalog:
+  hono: ^4.8.2
+  dotenv: ^17.2.2
+  better-auth: 1.5.5
+  "@prisma/client": ^7.2.0
+  "@orpc/tanstack-query": ^1.13.6
+  "@orpc/server": ^1.12.2
+  "@orpc/client": ^1.12.2
+  "@better-auth/expo": 1.5.5
+  typescript: ^5
