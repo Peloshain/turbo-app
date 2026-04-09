@@ -20,14 +20,14 @@ model Category {
   items Item[]
 }
 
-model User {
-  id        String   @id @default(uuid()) @db.Uuid 
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  items     Item[]
-  outfits   Outfit[]
-}
+// model User {
+//   id        String   @id @default(uuid()) @db.Uuid 
+//   email     String   @unique
+//   name      String?
+//   createdAt DateTime @default(now())
+//   items     Item[]
+//   outfits   Outfit[]
+// }
 
 model Item {
   id          String   @id @default(uuid()) @db.Uuid
