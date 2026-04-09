@@ -1,6 +1,7 @@
+import { env } from "@repo/env/native";
 import { useQuery } from "@tanstack/react-query";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 
 //move to models src
 export interface Category {

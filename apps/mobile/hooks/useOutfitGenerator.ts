@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { env } from "@repo/env/native";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
 
 export type Occasion = "casual" | "work" | "formal" | "sport";

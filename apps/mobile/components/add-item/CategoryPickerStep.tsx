@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { ImagePickerAsset } from "expo-image-picker";
 import { useQuery } from "@tanstack/react-query";
+import { env } from "@repo/env/native";
 
 interface Category {
   id: string;
@@ -27,7 +28,7 @@ interface Props {
 //Useful for Android emulator
 const API_URL = Platform.select({
   android: "http://10.0.2.2:3000",
-  ios: process.env.EXPO_PUBLIC_API_URL,
+  ios: env.EXPO_PUBLIC_SERVER_URL,
 });
 
 // Fetch categories from the API

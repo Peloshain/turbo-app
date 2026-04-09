@@ -3,6 +3,7 @@ import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import "dotenv/config";
+import { env } from "@repo/env/server";
 
 export function createAuth() {
   return betterAuth({
@@ -11,7 +12,7 @@ export function createAuth() {
     }),
 
     trustedOrigins: [
-      //   process.env.CORS_ORIGIN,
+      env.CORS_ORIGIN,
       ...[
         "exp://",
         "exp://**",
@@ -22,8 +23,8 @@ export function createAuth() {
     emailAndPassword: {
       enabled: true,
     },
-    secret: process.env.BETTER_AUTH_SECRET,
-    baseURL: process.env.BETTER_AUTH_URL,
+    secret: env.BETTER_AUTH_SECRET,
+    baseURL: env.BETTER_AUTH_URL,
     advanced: {
       defaultCookieAttributes: {
         sameSite: "none",

@@ -10,8 +10,9 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useDeleteItem } from "../../hooks/useWardrobe";
+import { env } from "@repo/env/native";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 
 export default function ItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
