@@ -10,21 +10,22 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@better-auth/expo": "catalog:",
     "@tanstack/react-query": "^5.90.21",
+    "better-auth": "catalog:",
     "expo": "~55.0.6",
     "expo-constants": "~55.0.8",
     "expo-file-system": "~55.0.11",
     "expo-image-picker": "~55.0.13",
     "expo-linking": "~55.0.7",
+    "expo-network": "^55.0.13",
     "expo-router": "~55.0.6",
-    "expo-status-bar": "~55.0.4",
     "expo-secure-store": "~55.0.8",
+    "expo-status-bar": "~55.0.4",
     "react": "19.2.0",
     "react-native": "0.83.2",
     "react-native-safe-area-context": "~5.6.2",
-    "react-native-screens": "~4.23.0",
-    "better-auth": "catalog:",
-    "@better-auth/expo": "catalog:"
+    "react-native-screens": "~4.23.0"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",

@@ -6,10 +6,6 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { authClient } from "../lib/auth-client";
 
-// const { data: session } = authClient.useSession();
-
-// console.log("Current session:", session);
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -85,6 +81,8 @@ const boundaryStyles = StyleSheet.create({
 });
 
 export default function RootLayout() {
+  const { data: session } = authClient.useSession();
+  console.log("Current session:", session);
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
