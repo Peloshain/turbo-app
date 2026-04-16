@@ -47,40 +47,51 @@ export default function SignInScreen() {
   }
 
   // ── Email + password sign in ──────────────────────────
-  // async function handleSignIn() {
-  //   if (!validate()) return;
-  //   setLoading(true);
-  //   setError(null);
+  async function handleSignIn() {
+    if (!validate()) return;
+    setLoading(true);
+    setError(null);
 
-  //   const { data, error } = await authClient.signIn.email({
-  //     email,
-  //     password,
-  //     callbackURL: "/(tabs)",
-  //   });
+    // await authClient.signOut({
+    //   fetchOptions: {
+    //     onSuccess: () => {
+    //       console.log("Signed out successfully");
+    //     },
+    //     onError: (error) => {
+    //       console.error("Sign out failed:", error);
+    //     },
+    //   },
+    // });
 
-  //   setLoading(false);
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+    });
 
-  //   if (error) {
-  //     setError(error.message ?? "Incorrect email or password");
-  //   }
-  //   // AuthGate handles redirect on successful session
-  // }
-  const handleSignIn = async () => {
-    try {
-      setLoading(true);
+    setLoading(false);
 
-      await authClient.signIn.email({
-        email,
-        password,
-      });
-
-      router.replace("/(tabs)");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+    if (error) {
+      setError(error.message ?? "Incorrect email or password");
     }
-  };
+    // AuthGate handles redirect on successful session
+  }
+  // const handleSignIn = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     const res = await authClient.signIn.email({
+  //       email,
+  //       password,
+  //       callbackURL: "/(tabs)",
+  //     });
+
+  //     console.log("SIGN IN OK:", res);
+  //   } catch (err: any) {
+  //     console.log("SIGN IN ERROR:", err?.message, err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // ── Magic link ────────────────────────────────────────
   async function handleMagicLink() {

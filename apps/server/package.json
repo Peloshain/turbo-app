@@ -17,8 +17,12 @@
     "@repo/ai": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/storage": "workspace:*",
+    "@repo/auth": "workspace:*",
+    "@repo/api": "workspace:*",
     "dotenv": "^17.3.1",
     "hono": "^4.12.7",
-    "openai": "^6.27.0"
+    "openai": "^6.27.0",
+    "@orpc/openapi": "catalog:",
+    "@orpc/server": "catalog:"
   }
 }

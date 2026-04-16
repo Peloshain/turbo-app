@@ -38,7 +38,7 @@ model Item {
   colorHex    String?                 
   categoryId  String   @db.Uuid
   category    Category @relation(fields: [categoryId], references: [id])
-  userId      String   @db.Uuid
+  userId      String   
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   outfitItems OutfitItem[]
@@ -49,7 +49,7 @@ model Outfit {
   name        String?
   occasion    String?
   aiGenerated Boolean     @default(false)
-  userId      String      @db.Uuid
+  userId      String     
   user        User        @relation(fields: [userId], references: [id])
   items       OutfitItem[]
   createdAt   DateTime    @default(now())
