@@ -26,11 +26,8 @@ export interface GeneratedOutfit {
 }
 
 export function useOutfitGenerator() {
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const userId = session?.user.id;
-  if (!userId) {
-    throw new Error("User must be signed in to generate outfits");
-  }
 
   const queryClient = useQueryClient();
   const [result, setResult] = useState<GeneratedOutfit | null>(null);

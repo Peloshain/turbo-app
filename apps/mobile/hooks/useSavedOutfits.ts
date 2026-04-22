@@ -29,9 +29,6 @@ export interface SavedOutfit {
 export function useSavedOutfits() {
   const { data: session } = authClient.useSession();
   const userId = session?.user.id;
-  if (!userId) {
-    throw new Error("User must be signed in to generate outfits");
-  }
 
   return useQuery<SavedOutfit[]>({
     queryKey: ["outfits"],
