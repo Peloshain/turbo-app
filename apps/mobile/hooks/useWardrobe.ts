@@ -24,9 +24,10 @@ export interface WardrobeItem {
 }
 
 // Fetch all items for the current user, optionally filtered by category
-function fetchItems(categorySlug?: string): Promise<WardrobeItem[]> {
-  const { data: session } = authClient.useSession();
-  const userId = session?.user.id;
+function fetchItems(
+  userId?: string,
+  categorySlug?: string,
+): Promise<WardrobeItem[]> {
   console.log("fetchItems - userId:", userId);
   if (!userId) {
     throw new Error("User must be signed in to view wardrobe");
@@ -43,9 +44,10 @@ function fetchItems(categorySlug?: string): Promise<WardrobeItem[]> {
 }
 
 export function useWardrobeItems(categorySlug?: string) {
+  const { data: session } = authClient.useSession();
   return useQuery({
     queryKey: ["wardrobe", categorySlug],
-    queryFn: () => fetchItems(categorySlug),
+    queryFn: () => fetchItems(session!.user.id, categorySlug),
   });
 }
 
