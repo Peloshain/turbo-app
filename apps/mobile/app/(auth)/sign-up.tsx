@@ -48,42 +48,19 @@ export default function SignUpScreen() {
     return Object.keys(errors).length === 0;
   }
 
-  // async function handleSignUp() {
-  //   if (!validate()) return;
-  //   setLoading(true);
-  //   setError(null);
-
-  //   const { data, error } = await authClient.signUp.email({
-  //     email,
-  //     password,
-  //     name: name.trim(),
-  //     callbackURL: "/(tabs)",
-  //   });
-
-  //   console.log("Sign-up response:", { data, error });
-
-  //   setLoading(false);
-
-  //   if (error) {
-  //     setError(error.message ?? "Something went wrong");
-  //   }
-  //   // AuthGate handles redirect on successful session
-  // }
-
   const handleSignUp = async () => {
+    setError(null);
+    setLoading(true);
     try {
-      setLoading(true);
-
-      await authClient.signUp.email({
-        email,
+      const { error } = await authClient.signUp.email({
         name,
+        email,
         password,
       });
-
-      // opcional: redirigir
-      router.replace("/(auth)/sign-in");
-    } catch (err) {
-      console.error(err);
+      if (error) setError(error.message ?? "Sign-up failed.");
+      // On success, session updates and _layout redirects to (tabs).
+    } catch (e: any) {
+      setError(e?.message ?? "An unexpected error occurred.");
     } finally {
       setLoading(false);
     }

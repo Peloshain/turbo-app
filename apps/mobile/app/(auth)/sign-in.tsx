@@ -51,47 +51,16 @@ export default function SignInScreen() {
     if (!validate()) return;
     setLoading(true);
     setError(null);
-
-    // await authClient.signOut({
-    //   fetchOptions: {
-    //     onSuccess: () => {
-    //       console.log("Signed out successfully");
-    //     },
-    //     onError: (error) => {
-    //       console.error("Sign out failed:", error);
-    //     },
-    //   },
-    // });
-
-    const { data, error } = await authClient.signIn.email({
-      email,
-      password,
-    });
-
-    setLoading(false);
-
-    if (error) {
-      setError(error.message ?? "Incorrect email or password");
+    try {
+      const { error } = await authClient.signIn.email({ email, password });
+      if (error) setError(error.message ?? "Sign-in failed.");
+      // On success, the useSession hook in _layout will update and redirect automatically.
+    } catch (e: any) {
+      setError(e?.message ?? "An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
-    // AuthGate handles redirect on successful session
   }
-  // const handleSignIn = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     const res = await authClient.signIn.email({
-  //       email,
-  //       password,
-  //       callbackURL: "/(tabs)",
-  //     });
-
-  //     console.log("SIGN IN OK:", res);
-  //   } catch (err: any) {
-  //     console.log("SIGN IN ERROR:", err?.message, err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   // ── Magic link ────────────────────────────────────────
   async function handleMagicLink() {

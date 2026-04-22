@@ -15,11 +15,10 @@ import { useAddItem } from "../../hooks/useAddItem";
 import { ImagePickerStep } from "../../components/add-item/ImagePickerStep";
 import { CategoryPickerStep } from "../../components/add-item/CategoryPickerStep";
 import { ConfirmStep } from "../../components/add-item/ConfirmStep";
-
-// Temporary hardcoded user — replace with real auth later
-const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
+import { authClient } from "../../lib/auth-client";
 
 export default function AddItemScreen() {
+  const { data: session } = authClient.useSession();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const {
@@ -59,13 +58,16 @@ export default function AddItemScreen() {
 
   async function handleSave() {
     if (!selectedCategory) return;
-    await saveItem(selectedCategory.id, TEMP_USER_ID);
+    if (!session) {
+      Alert.alert("Not signed in", "Please sign in to save items.");
+      return;
+    }
+    await saveItem(selectedCategory.id, session?.user.id);
     Alert.alert("Done!", "Item added to your wardrobe.", [
       { text: "Add another", onPress: reset },
       { text: "Done", onPress: handleClose },
     ]);
   }
-
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* ── Header ── */}

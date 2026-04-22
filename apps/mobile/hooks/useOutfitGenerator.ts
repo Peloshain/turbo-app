@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env/native";
+import { authClient } from "../lib/auth-client";
 
 const API_URL = env.EXPO_PUBLIC_SERVER_URL;
-const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
 
 export type Occasion = "casual" | "work" | "formal" | "sport";
 export type Weather = "hot" | "mild" | "cold";
@@ -26,10 +26,15 @@ export interface GeneratedOutfit {
 }
 
 export function useOutfitGenerator() {
+  const { data: session } = authClient.useSession();
+  const userId = session?.user.id;
+  if (!userId) {
+    throw new Error("User must be signed in to generate outfits");
+  }
+
   const queryClient = useQueryClient();
   const [result, setResult] = useState<GeneratedOutfit | null>(null);
   const [savedId, setSavedId] = useState<string | null>(null);
-
   // ── Generate
   const generate = useMutation({
     mutationFn: async ({
@@ -42,7 +47,7 @@ export function useOutfitGenerator() {
       const res = await fetch(`${API_URL}/outfits/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: TEMP_USER_ID, occasion, weather }),
+        body: JSON.stringify({ userId: userId, occasion, weather }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -61,7 +66,7 @@ export function useOutfitGenerator() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: TEMP_USER_ID,
+          userId: userId,
           itemIds: outfit.itemIds,
           outfitName: outfit.outfitName,
           occasion: outfit.occasion,

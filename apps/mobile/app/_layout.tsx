@@ -1,9 +1,9 @@
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { authClient } from "../lib/auth-client";
 
 const queryClient = new QueryClient({
@@ -81,8 +81,24 @@ const boundaryStyles = StyleSheet.create({
 });
 
 export default function RootLayout() {
-  const { data: session } = authClient.useSession();
-  console.log("Current session:", session);
+  const router = useRouter();
+  const segments = useSegments();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (isPending) return; // wait until session is resolved
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (!session && !inAuthGroup) {
+      // Not signed in → go to sign-in
+      router.replace("/(auth)/sign-in");
+    } else if (session && inAuthGroup) {
+      // Signed in but still on auth screens → go to app
+      router.replace("/(tabs)");
+    }
+  }, [session, isPending, segments]);
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

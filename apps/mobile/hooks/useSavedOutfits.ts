@@ -1,8 +1,8 @@
 import { env } from "@repo/env/native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { authClient } from "../lib/auth-client";
 
 const API_URL = env.EXPO_PUBLIC_SERVER_URL;
-const TEMP_USER_ID = "7a761c35-bc8f-4743-a36a-9b0500906504";
 
 export interface SavedOutfitItem {
   id: string;
@@ -27,10 +27,16 @@ export interface SavedOutfit {
 
 // Fetch all saved outfits for the current user
 export function useSavedOutfits() {
+  const { data: session } = authClient.useSession();
+  const userId = session?.user.id;
+  if (!userId) {
+    throw new Error("User must be signed in to generate outfits");
+  }
+
   return useQuery<SavedOutfit[]>({
     queryKey: ["outfits"],
     queryFn: () =>
-      fetch(`${API_URL}/outfits/user/${TEMP_USER_ID}`)
+      fetch(`${API_URL}/outfits/user/${userId}`)
         .then((r) => r.json())
         .then((d) => d.outfits),
   });

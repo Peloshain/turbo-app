@@ -106,6 +106,9 @@ itemsRouter.post("/", async (c) => {
 
 // User items by user
 itemsRouter.get("/user/:userId", async (c) => {
+  console.log(
+    `[GET /items/user/:userId] Request received with userId: ${c.req.param("userId")}`,
+  );
   const { userId } = c.req.param();
   const { categorySlug } = c.req.query();
 

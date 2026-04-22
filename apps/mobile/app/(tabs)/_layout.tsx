@@ -1,7 +1,14 @@
 import { Tabs } from "expo-router";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { authClient } from "../../lib/auth-client";
 
 // Simple icons with emojis (temp)
 function TabIcon({
@@ -25,6 +32,19 @@ function TabIcon({
   );
 }
 
+function LogOutButton() {
+  async function handleSignOut() {
+    await authClient.signOut();
+    // Session clears → root _layout redirects to (auth)/sign-in
+  }
+
+  return (
+    <TouchableOpacity onPress={handleSignOut} style={styles.button}>
+      <Text style={styles.text}>Log out</Text>
+    </TouchableOpacity>
+  );
+}
+
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -37,6 +57,7 @@ export default function TabsLayout() {
         headerTitleStyle: styles.headerTitle,
         tabBarStyle: [styles.tabBar, { paddingBottom: insets.bottom }],
         tabBarShowLabel: false,
+        headerRight: () => <LogOutButton />,
       }}
     >
       <Tabs.Screen
@@ -122,5 +143,12 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: "#1C1C1E",
     fontWeight: "600",
+  },
+  text: {
+    fontSize: 15,
+    color: "#e00",
+  },
+  button: {
+    marginRight: 16,
   },
 });
