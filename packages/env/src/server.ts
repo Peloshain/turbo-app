@@ -20,6 +20,8 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: z.string(),
     R2_BUCKET: z.string(),
     R2_PUBLIC_URL: z.url(),
+    LMSTUDIO_BASE_URL: z.url().default("http://localhost:1234/v1"),
+    LMSTUDIO_MODEL: z.string().default("gemma-4-e4b"),
     NODE_ENV: z
       .enum(["development", "production", "test"])
       .default("development"),

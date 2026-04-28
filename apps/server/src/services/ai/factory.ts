@@ -1,6 +1,7 @@
 import type { AIService } from "./types";
 import { GeminiAdapter } from "./gemini.adapter";
 import { env } from "@repo/env/server";
+import { LMStudioAdapter } from "./lmstudio.adapter";
 
 export function createAIService(): AIService {
   //post mvp read this from BD instead env
@@ -14,6 +15,13 @@ export function createAIService(): AIService {
     }
     // case 'openai': return new OpenAIAdapter(...)
     // case 'anthropic': return new AnthropicAdapter(...)
+    case "lmstudio": {
+      return new LMStudioAdapter(
+        env.LMSTUDIO_BASE_URL, // e.g. "http://192.168.1.x:1234/v1"
+        env.LMSTUDIO_MODEL, // e.g. "gemma-4-e4b"
+      );
+    }
+
     default:
       throw new Error(`Unknown AI provider: "${provider}"`);
   }

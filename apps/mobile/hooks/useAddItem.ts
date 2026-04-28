@@ -88,6 +88,8 @@ export function useAddItem() {
         body: JSON.stringify({ imageBase64, categoryName }),
       });
 
+      console.log(`AI analysis response status: ${res.status}`);
+      console.log(`AI res: ${res}`);
       const text = await res.text();
       const data = JSON.parse(text);
 

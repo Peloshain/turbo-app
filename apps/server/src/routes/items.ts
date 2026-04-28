@@ -72,11 +72,18 @@ itemsRouter.post("/analyze", async (c) => {
 
   // Clean response from ```json if the model decides to wrap it in a code block
   const clean = description.replace(/```json|```/g, "").trim();
+  const match = clean.match(/\{[\s\S]*\}/);
+
+  console.log(`CLEAN RESPONSE: ${clean}`);
+  if (!match) return c.json({ error: "Invalid AI response" }, 500);
+
   try {
-    const result = JSON.parse(clean);
-    return c.json({ ok: true, ...result });
-  } catch {
-    return c.json({ ok: false, error: "Failed to parse AI response" }, 500);
+    const result = JSON.parse(match[0]); //  parse the extracted JSON, not the whole string
+    console.log(`PARSED RESULT: ${JSON.stringify(result)}`); //  readable object log
+    return c.json({ result: { ok: true, ...result } });
+  } catch (e) {
+    console.error("JSON parse failed:", e);
+    return c.json({ error: "Failed to parse AI response" }, 500);
   }
 });
 

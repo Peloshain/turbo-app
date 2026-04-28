@@ -57,7 +57,7 @@ export default function TabsLayout() {
         headerTitleStyle: styles.headerTitle,
         tabBarStyle: [styles.tabBar, { paddingBottom: insets.bottom }],
         tabBarShowLabel: false,
-        headerRight: () => <LogOutButton />,
+        // headerRight: () => <LogOutButton />,
       }}
     >
       <Tabs.Screen
@@ -92,6 +92,15 @@ export default function TabsLayout() {
           headerTitle: "My outfits",
           tabBarIcon: ({ focused }) => (
             <TabIcon emoji="🗂️" label="Saved" focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused }) => (
+            <TabIcon emoji="👤" label="Profile" focused={focused} />
           ),
         }}
       />
