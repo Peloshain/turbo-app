@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { db } from "@repo/db";
 import { storageService } from "@repo/storage";
 // import OpenAI from "openai";
-import { aiService, parseDataUrl } from "../services";
+import { aiService, parseDataUrl } from "@repo/ai";
 import { env } from "@repo/env/server";
 
 export const itemsRouter = new Hono();

@@ -1,45 +1,32 @@
-type AIProvider = "openai" | "anthropic";
+import type { AIService } from "./types";
+import { GeminiAdapter } from "./adapters/gemini.adapter";
+import { env } from "@repo/env/server";
+import { LMStudioAdapter } from "./adapters/lmstudio.adapter";
+export * from "./utils";
 
-interface AIConfig {
-  provider: AIProvider;
-  model?: string;
-  apiKey: string;
+export function createAIService(): AIService {
+  //post mvp read this from BD instead env
+  const provider = env.AI_PROVIDER ?? "gemini";
+
+  switch (provider) {
+    case "gemini": {
+      const apiKey = env.GEMINI_API_KEY;
+      if (!apiKey) throw new Error("GEMINI_API_KEY is required");
+      return new GeminiAdapter(apiKey, env.GEMINI_MODEL);
+    }
+    // case 'openai': return new OpenAIAdapter(...)
+    // case 'anthropic': return new AnthropicAdapter(...)
+    case "lmstudio": {
+      return new LMStudioAdapter(
+        env.LMSTUDIO_BASE_URL, // e.g. "http://192.168.1.x:1234/v1"
+        env.LMSTUDIO_MODEL, // e.g. "gemma-4-e4b"
+      );
+    }
+
+    default:
+      throw new Error(`Unknown AI provider: "${provider}"`);
+  }
 }
 
-export function createAIClient(config: AIConfig) {
-  if (config.provider === "openai") {
-    const { OpenAI } = require("openai");
-    return new OpenAI({ apiKey: config.apiKey });
-  }
-  if (config.provider === "anthropic") {
-    const Anthropic = require("@anthropic-ai/sdk");
-    return new Anthropic({ apiKey: config.apiKey });
-  }
-  throw new Error(`Provider ${config.provider} no soportado`);
-}
-
-export async function generateText(
-  config: AIConfig,
-  prompt: string,
-): Promise<string> {
-  const client = createAIClient(config);
-
-  if (config.provider === "openai") {
-    const res = await client.chat.completions.create({
-      model: config.model ?? "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-    });
-    return res.choices[0].message.content ?? "";
-  }
-
-  if (config.provider === "anthropic") {
-    const res = await client.messages.create({
-      model: config.model ?? "claude-sonnet-4-20250514",
-      max_tokens: 1024,
-      messages: [{ role: "user", content: prompt }],
-    });
-    return res.content[0].type === "text" ? res.content[0].text : "";
-  }
-
-  return "";
-}
+// Singleton — once the server is up
+export const aiService = createAIService();

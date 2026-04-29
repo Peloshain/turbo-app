@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { db } from "@repo/db";
-import OpenAI from "openai";
-import { aiService } from "../services";
+import { aiService } from "@repo/ai";
 import { env } from "@repo/env/server";
 
 export const outfitsRouter = new Hono();
