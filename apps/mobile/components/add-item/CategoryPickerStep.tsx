@@ -23,6 +23,7 @@ interface Props {
   image: ImagePickerAsset;
   loading: boolean;
   onSelectCategory: (category: Category) => void;
+  onCancelAnalysis: () => void;
 }
 
 //Useful for Android emulator
@@ -47,6 +48,7 @@ export function CategoryPickerStep({
   image,
   loading,
   onSelectCategory,
+  onCancelAnalysis,
 }: Props) {
   const { data: categories, isLoading: loadingCategories } = useCategories();
   if (loadingCategories) {
@@ -76,12 +78,17 @@ export function CategoryPickerStep({
           </View>
         )}
       </View>
-
+      {loading && (
+        <View style={styles.cancelAnalysisButton}>
+          <Pressable onPress={() => onCancelAnalysis()}>
+            <Text style={styles.cancelAnalysis}>Cancel AI analysis</Text>
+          </Pressable>
+        </View>
+      )}
       <Text style={styles.title}>What type of item is this?</Text>
       <Text style={styles.subtitle}>
         Select a category to help the AI understand your item
       </Text>
-
       {/* Category grid */}
       <FlatList
         data={categories}
@@ -189,5 +196,19 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#1C1C1E",
     textAlign: "center",
+  },
+  cancelAnalysisButton: {
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 14,
+    backgroundColor: "#FFF2F2",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#FFCDD2",
+  },
+  cancelAnalysis: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#DC2626",
   },
 });

@@ -13,12 +13,18 @@ export class LMStudioAdapter implements AIService {
     this.model = model;
   }
 
-  async analyzeText(prompt: string): Promise<AIAnalysisResult> {
-    const response = await this.client.chat.completions.create({
-      model: this.model,
-      temperature: 0,
-      messages: [{ role: "user", content: prompt }],
-    });
+  async analyzeText(
+    prompt: string,
+    signal?: AbortSignal,
+  ): Promise<AIAnalysisResult> {
+    const response = await this.client.chat.completions.create(
+      {
+        model: this.model,
+        temperature: 0,
+        messages: [{ role: "user", content: prompt }],
+      },
+      { signal },
+    );
 
     const text = response.choices[0]?.message.content ?? "";
 
@@ -29,23 +35,27 @@ export class LMStudioAdapter implements AIService {
     base64: string,
     mimeType: string,
     prompt: string,
+    signal?: AbortSignal,
   ): Promise<AIAnalysisResult> {
-    const response = await this.client.chat.completions.create({
-      model: this.model,
-      temperature: 0,
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "image_url",
-              image_url: { url: `data:${mimeType};base64,${base64}` },
-            },
-            { type: "text", text: prompt },
-          ],
-        },
-      ],
-    });
+    const response = await this.client.chat.completions.create(
+      {
+        model: this.model,
+        temperature: 0,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "image_url",
+                image_url: { url: `data:${mimeType};base64,${base64}` },
+              },
+              { type: "text", text: prompt },
+            ],
+          },
+        ],
+      },
+      { signal },
+    );
 
     const text = response.choices[0]?.message.content ?? "";
 

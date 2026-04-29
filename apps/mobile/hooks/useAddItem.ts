@@ -1,6 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system/legacy";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Alert, Platform } from "react-native";
 import { env } from "@repo/env/native";
 
@@ -23,6 +23,7 @@ export function useAddItem() {
   const [step, setStep] = useState<"pick" | "category" | "confirm" | "done">(
     "pick",
   );
+  const controllerRef = useRef<AbortController | null>(null);
 
   // Request the appropriate permission before launching camera or gallery.
   // Returns true if granted, false if denied.
@@ -75,6 +76,10 @@ export function useAddItem() {
   }
 
   async function analyzeWithCategory(categoryName: string, categoryId: string) {
+    // Cancel any in-flight request before starting a new one
+    controllerRef.current?.abort();
+    controllerRef.current = new AbortController();
+
     if (!image?.base64) return;
     setLoading(true);
 
@@ -84,6 +89,7 @@ export function useAddItem() {
 
       const res = await fetch(`${API_URL}/items/analyze`, {
         method: "POST",
+        signal: controllerRef.current.signal,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageBase64, categoryName }),
       });
@@ -101,11 +107,20 @@ export function useAddItem() {
         });
         setStep("confirm");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") {
+        console.log("Cancelled");
+      } else {
+        console.log("Something went wrong");
+      }
     } finally {
       setLoading(false);
+      controllerRef.current = null;
     }
+  }
+
+  function cancelAnalysis() {
+    controllerRef.current?.abort();
   }
 
   async function saveItem(categoryId: string, userId: string) {
@@ -174,5 +189,6 @@ export function useAddItem() {
     analyzeWithCategory,
     saveItem,
     reset,
+    cancelAnalysis,
   };
 }

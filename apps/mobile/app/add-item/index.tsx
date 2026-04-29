@@ -30,6 +30,7 @@ export default function AddItemScreen() {
     analyzeWithCategory,
     saveItem,
     reset,
+    cancelAnalysis,
   } = useAddItem();
 
   const [selectedCategory, setSelectedCategory] = useState<{
@@ -137,6 +138,7 @@ export default function AddItemScreen() {
           <CategoryPickerStep
             image={image}
             onSelectCategory={handleCategorySelect}
+            onCancelAnalysis={cancelAnalysis}
             loading={loading}
           />
         )}

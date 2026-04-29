@@ -12,6 +12,11 @@ export const itemsRouter = new Hono();
 
 // Analize image before save
 itemsRouter.post("/analyze", async (c) => {
+  // Abort if client disconnects OR if it takes more than 15s
+  const controller = new AbortController();
+  // If the client drops the connection, abort too
+  c.req.raw.signal?.addEventListener("abort", () => controller.abort());
+
   const { imageBase64, categoryName } = await c.req.json<{
     imageBase64: string;
     categoryName: string;
@@ -53,7 +58,12 @@ itemsRouter.post("/analyze", async (c) => {
 
   const { description } =
     base64 && mimeType
-      ? await aiService.analyzeImage(base64, mimeType, prompt)
+      ? await aiService.analyzeImage(
+          base64,
+          mimeType,
+          prompt,
+          controller.signal,
+        )
       : { description: "" };
 
   // text analyzer

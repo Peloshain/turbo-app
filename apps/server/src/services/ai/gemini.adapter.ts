@@ -9,10 +9,13 @@ export class GeminiAdapter implements AIService {
     this.client = new GoogleGenerativeAI(apiKey);
     this.model = model;
   }
-  async analyzeText(prompt: string): Promise<AIAnalysisResult> {
+  async analyzeText(
+    prompt: string,
+    signal?: AbortSignal,
+  ): Promise<AIAnalysisResult> {
     const model = this.client.getGenerativeModel({ model: this.model });
 
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(prompt, { signal });
 
     return {
       description: result.response.text(),
@@ -24,13 +27,14 @@ export class GeminiAdapter implements AIService {
     base64: string,
     mimeType: string,
     prompt: string,
+    signal?: AbortSignal,
   ): Promise<AIAnalysisResult> {
     const model = this.client.getGenerativeModel({ model: this.model });
 
-    const result = await model.generateContent([
-      prompt,
-      { inlineData: { data: base64, mimeType } },
-    ]);
+    const result = await model.generateContent(
+      [prompt, { inlineData: { data: base64, mimeType } }],
+      { signal },
+    );
 
     return {
       description: result.response.text(),

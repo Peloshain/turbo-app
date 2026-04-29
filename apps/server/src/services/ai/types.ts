@@ -4,10 +4,11 @@ export interface AIAnalysisResult {
 }
 
 export interface AIService {
-  analyzeText(prompt: string): Promise<AIAnalysisResult>;
+  analyzeText(prompt: string, signal?: AbortSignal): Promise<AIAnalysisResult>;
   analyzeImage(
     base64: string,
     mimeType: string,
     prompt: string,
+    signal?: AbortSignal,
   ): Promise<AIAnalysisResult>;
 }
