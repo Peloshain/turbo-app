@@ -84,6 +84,8 @@ Respond ONLY with valid JSON, no extra text:
   "styleNote": "one practical tip on how to wear this outfit"
 }`;
 
+  console.log("AI Prompt:", prompt);
+
   const { description: raw } = await aiService.analyzeText(prompt);
 
   // Extract JSON object — handles reasoning_content leaking in, stray text, and markdown fences

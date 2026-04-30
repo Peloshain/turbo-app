@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env/native";
 import { authClient } from "../lib/auth-client";
@@ -26,13 +26,15 @@ export interface GeneratedOutfit {
 }
 
 export function useOutfitGenerator() {
-  const { data: session, isPending } = authClient.useSession();
+  const controllerRef = useRef<AbortController | null>(null);
+
+  const { data: session } = authClient.useSession();
   const userId = session?.user.id;
 
   const queryClient = useQueryClient();
   const [result, setResult] = useState<GeneratedOutfit | null>(null);
   const [savedId, setSavedId] = useState<string | null>(null);
-  // ── Generate
+
   const generate = useMutation({
     mutationFn: async ({
       occasion,
@@ -41,10 +43,14 @@ export function useOutfitGenerator() {
       occasion?: Occasion;
       weather?: Weather;
     }) => {
+      // Create a fresh controller per invocation, not per render
+      controllerRef.current = new AbortController();
+
       const res = await fetch(`${API_URL}/outfits/generate`, {
         method: "POST",
+        signal: controllerRef.current.signal,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: userId, occasion, weather }),
+        body: JSON.stringify({ userId, occasion, weather }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -52,18 +58,21 @@ export function useOutfitGenerator() {
     },
     onSuccess: (outfit) => {
       setResult(outfit);
-      setSavedId(null); // Reset saved state when a new outfit is generated
+      setSavedId(null);
+    },
+    // Swallow AbortErrors so they don't surface as real errors
+    onError: (error) => {
+      if (error.name === "AbortError") return;
     },
   });
 
-  // ── Save
   const save = useMutation({
     mutationFn: async (outfit: GeneratedOutfit & { occasion?: Occasion }) => {
       const res = await fetch(`${API_URL}/outfits/save`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: userId,
+          userId,
           itemIds: outfit.itemIds,
           outfitName: outfit.outfitName,
           occasion: outfit.occasion,
@@ -75,14 +84,20 @@ export function useOutfitGenerator() {
     },
     onSuccess: (saved) => {
       setSavedId(saved.id);
-      // Refresh saved outfits tab
       queryClient.invalidateQueries({ queryKey: ["outfits"] });
     },
   });
 
+  function cancelAnalysis() {
+    controllerRef.current?.abort();
+    generate.reset(); // ← clears isPending so isGenerating goes false
+  }
+
   function reset() {
     setResult(null);
     setSavedId(null);
+    generate.reset();
+    controllerRef.current = null;
   }
 
   return {
@@ -90,9 +105,11 @@ export function useOutfitGenerator() {
     savedId,
     isGenerating: generate.isPending,
     isSaving: save.isPending,
-    error: generate.error?.message,
+    error:
+      generate.error?.name === "AbortError" ? null : generate.error?.message,
     generate: generate.mutate,
     save: save.mutate,
     reset,
+    cancelAnalysis,
   };
 }

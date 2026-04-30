@@ -30,9 +30,14 @@ export default function OutfitScreen() {
     generate,
     save,
     reset,
+    cancelAnalysis,
   } = useOutfitGenerator();
 
   function handleGenerate() {
+    if (isGenerating) {
+      cancelAnalysis();
+      return;
+    }
     generate({
       occasion: occasion ?? undefined,
       weather: weather ?? undefined,
@@ -71,16 +76,16 @@ export default function OutfitScreen() {
         <Pressable
           style={({ pressed }) => [
             styles.generateButton,
-            isGenerating && styles.generateButtonDisabled,
-            pressed && !isGenerating && styles.generateButtonPressed,
+            isGenerating && styles.generateButtonActive, // rename: it's active, not disabled
+            pressed && styles.generateButtonPressed,
           ]}
           onPress={handleGenerate}
-          disabled={isGenerating}
+          // ← remove disabled entirely
         >
           {isGenerating ? (
             <View style={styles.loadingRow}>
               <ActivityIndicator color="#FFFFFF" size="small" />
-              <Text style={styles.generateButtonText}>AI is styling...</Text>
+              <Text style={styles.generateButtonText}>Cancel AI styling</Text>
             </View>
           ) : (
             <Text style={styles.generateButtonText}>
@@ -169,6 +174,9 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
+  },
+  generateButtonActive: {
+    backgroundColor: "#636366", // grey = "in progress, tap to cancel"
   },
   loadingRow: {
     flexDirection: "row",

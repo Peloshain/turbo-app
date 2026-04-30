@@ -33,11 +33,13 @@ export function ItemCard({ item }: Props) {
 
       {/* Color dot + category badge row */}
       <View style={styles.badgeRow}>
-        <View style={styles.categoryBadge}>
-          <Text style={styles.categoryIcon}>{item.category.icon}</Text>
-        </View>
         {item.colorHex && (
           <View style={[styles.colorDot, { backgroundColor: item.colorHex }]} />
+        )}
+        {item.category.icon && (
+          <View style={styles.categoryBadge}>
+            <Text style={styles.categoryIcon}>{item.category.icon}</Text>
+          </View>
         )}
       </View>
 
