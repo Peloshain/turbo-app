@@ -86,7 +86,10 @@ Respond ONLY with valid JSON, no extra text:
 
   const { description: raw } = await aiService.analyzeText(prompt);
 
-  const cleaned = raw.replace(/```json|```/g, "").trim();
+  // Extract JSON object — handles reasoning_content leaking in, stray text, and markdown fences
+  const match = raw.replace(/```json|```/g, "").match(/\{[\s\S]*\}/);
+
+  if (!match) return c.json({ error: "AI response could not be parsed" }, 500);
 
   let parsed: {
     itemIds: string[];
@@ -96,7 +99,7 @@ Respond ONLY with valid JSON, no extra text:
   };
 
   try {
-    parsed = JSON.parse(cleaned);
+    parsed = JSON.parse(match[0]);
   } catch {
     return c.json({ error: "AI response could not be parsed" }, 500);
   }
