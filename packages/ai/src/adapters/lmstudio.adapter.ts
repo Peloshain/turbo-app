@@ -25,7 +25,7 @@ export class LMStudioAdapter implements AIService {
       },
       { signal },
     );
-
+    console.log("LMStudioAdapter analyzeText response:", response);
     const text = response.choices[0]?.message.content ?? "";
 
     return { description: text, raw: response };

@@ -55,7 +55,7 @@ itemsRouter.post("/analyze", async (c) => {
       "colorHex": "the dominant color as hex code (e.g. '#1B3A6B')"
     }
   `;
-
+  console.log(`ANALYZE PROMPT: ${prompt}`);
   const { description } =
     base64 && mimeType
       ? await aiService.analyzeImage(
@@ -65,20 +65,6 @@ itemsRouter.post("/analyze", async (c) => {
           controller.signal,
         )
       : { description: "" };
-
-  // text analyzer
-  // const textPrompt = `
-  //   Imagine that I've sent you an image of an item in the category "${categoryName}".
-  //   Respond ONLY with a valid JSON object, no markdown, no explanation.
-  //   Format:
-  //   {
-  //     "name": "short descriptive name of the item",
-  //     "colorDesc": "human-readable color description (e.g. 'navy blue', 'forest green')",
-  //     "colorHex": "the dominant color as hex code (e.g. '#1B3A6B')"
-  //   }
-  // `;
-  // text analyzer
-  // const { description } = await aiService.analyzeText(textPrompt);
 
   // Clean response from ```json if the model decides to wrap it in a code block
   const clean = description.replace(/```json|```/g, "").trim();

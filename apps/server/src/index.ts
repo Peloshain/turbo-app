@@ -72,6 +72,7 @@ app.use("/*", async (c, next) => {
 app.use("/uploads/*", serveStatic({ root: "./" }));
 
 app.put("/uploads/*", async (c) => {
+  console.log("[upload] received request");
   console.log("[upload] path:", c.req.path);
   console.log("[upload] provider:", env.STORAGE_PROVIDER);
 
