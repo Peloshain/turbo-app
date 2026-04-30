@@ -4,9 +4,6 @@ import { authClient } from "../lib/auth-client";
 
 const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 
-// Temporary hardcoded user — replace with real auth later
-const TEMP_USER_ID = "E1THse2CuoGR5kiUpPKL4XRSKTFZgvBJ";
-
 //Move to models src
 export interface WardrobeItem {
   id: string;
@@ -48,6 +45,8 @@ export function useWardrobeItems(categorySlug?: string) {
   return useQuery({
     queryKey: ["wardrobe", categorySlug],
     queryFn: () => fetchItems(session!.user.id, categorySlug),
+    staleTime: 0,
+    refetchOnMount: true,
   });
 }
 

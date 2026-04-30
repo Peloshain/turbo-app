@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 16,
     overflow: "hidden",
-    marginBottom: 24,
+    marginBottom: 10,
     backgroundColor: "#F2F2F7",
   },
   imagePreview: {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   },
   cancelAnalysisButton: {
     marginHorizontal: 10,
-    marginVertical: 10,
+    marginBottom: 10,
     borderRadius: 14,
     backgroundColor: "#FFF2F2",
     alignItems: "center",
@@ -210,5 +210,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
     color: "#DC2626",
+    paddingVertical: 10,
   },
 });

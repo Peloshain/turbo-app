@@ -13,6 +13,7 @@ export function CategoryFilter({ categories, selected, onSelect }: Props) {
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.container}
+      style={styles.scrollView}
     >
       {/* "All" pill — always first */}
       <Pressable
@@ -48,9 +49,14 @@ export function CategoryFilter({ categories, selected, onSelect }: Props) {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 0,
+    flexShrink: 0,
+    height: 52,
+  },
   container: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     gap: 8,
     flexDirection: "row",
     alignItems: "center",
@@ -65,6 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F7",
     borderWidth: 1.5,
     borderColor: "transparent",
+    flexShrink: 0,
   },
   pillActive: {
     backgroundColor: "#1C1C1E",

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { View, FlatList, StyleSheet, RefreshControl, Text } from "react-native";
 import { useWardrobeItems } from "../../hooks/useWardrobe";
 import { useCategories } from "../../hooks/useCategories";
@@ -8,6 +8,7 @@ import { ItemCard } from "../../components/wardrobe/ItemCard";
 import { EmptyState } from "../../components/wardrobe/EmptyState";
 import { ErrorCard } from "../../components/ui/ErrorCard";
 import { SkeletonCard } from "../../components/ui/SkeletonCard";
+import { useFocusEffect } from "expo-router/build/exports";
 
 export default function WardrobeScreen() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -21,6 +22,12 @@ export default function WardrobeScreen() {
     refetch,
     isRefetching,
   } = useWardrobeItems(selectedCategory ?? undefined);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch]),
+  );
 
   // Client-side search filter — avoids extra API calls while typing
   const filtered = useMemo(() => {

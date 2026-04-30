@@ -7,9 +7,10 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { useProfile } from "../../hooks/useProfile";
 import { authClient } from "../../lib/auth-client";
+import { useCallback } from "react";
 
 function getInitials(name?: string | null) {
   if (!name) return "?";
@@ -23,7 +24,13 @@ function getInitials(name?: string | null) {
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { user, items, stats, loading, error } = useProfile();
+  const { user, items, stats, loading, error, refetch } = useProfile();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch]),
+  );
 
   async function handleSignOut() {
     Alert.alert("Log out", "Are you sure you want to log out?", [
