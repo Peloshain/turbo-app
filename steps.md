@@ -280,3 +280,5 @@ const API_URL = Platform.select({
 ```bash
 openssl rand -hex 32
 ```
+
+## ./gradlew clean

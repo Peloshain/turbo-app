@@ -9,28 +9,29 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { authClient } from "../../lib/auth-client";
+import { IconComponent } from "../../components/ui/Icon";
 
 // Simple icons with emojis (temp)
-function TabIcon({
-  emoji,
-  label,
-  focused,
-}: {
-  emoji: string;
-  label: string;
-  focused: boolean;
-}) {
-  return (
-    <View style={styles.tabItem}>
-      <Text style={[styles.tabEmoji, focused && styles.tabEmojiActive]}>
-        {emoji}
-      </Text>
-      <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>
-        {label}
-      </Text>
-    </View>
-  );
-}
+// function TabIcon({
+//   emoji,
+//   label,
+//   focused,
+// }: {
+//   emoji: string;
+//   label: string;
+//   focused: boolean;
+// }) {
+//   return (
+//     <View style={styles.tabItem}>
+//       <Text style={[styles.tabEmoji, focused && styles.tabEmojiActive]}>
+//         {emoji}
+//       </Text>
+//       <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>
+//         {label}
+//       </Text>
+//     </View>
+//   );
+// }
 
 function LogOutButton() {
   async function handleSignOut() {
@@ -73,7 +74,11 @@ export default function TabsLayout() {
             </Pressable>
           ),
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="👕" label="Clothing" focused={focused} />
+            <IconComponent
+              name="wardrobe"
+              color={focused ? "#1C1C1E" : "#8E8E93"}
+              size={24}
+            />
           ),
         }}
       />
@@ -82,7 +87,11 @@ export default function TabsLayout() {
         options={{
           headerTitle: "Build Outfit",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="✨" label="Outfit" focused={focused} />
+            <IconComponent
+              name="generate"
+              color={focused ? "#1C1C1E" : "#8E8E93"}
+              size={24}
+            />
           ),
         }}
       />
@@ -91,7 +100,11 @@ export default function TabsLayout() {
         options={{
           headerTitle: "My outfits",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="🗂️" label="Saved" focused={focused} />
+            <IconComponent
+              name="outfits"
+              color={focused ? "#1C1C1E" : "#8E8E93"}
+              size={24}
+            />
           ),
         }}
       />
@@ -100,7 +113,11 @@ export default function TabsLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="👤" label="Profile" focused={focused} />
+            <IconComponent
+              name="profile"
+              color={focused ? "#1C1C1E" : "#8E8E93"}
+              size={24}
+            />
           ),
         }}
       />

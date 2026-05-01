@@ -15,6 +15,7 @@ import {
 } from "../../hooks/useOutfitGenerator";
 import { OccasionPicker } from "../../components/outfit/OccasionPicker";
 import { OutfitResult } from "../../components/outfit/OutfitResult";
+import { IconComponent } from "../../components/ui/Icon";
 
 export default function OutfitScreen() {
   const insets = useSafeAreaInsets();
@@ -76,11 +77,10 @@ export default function OutfitScreen() {
         <Pressable
           style={({ pressed }) => [
             styles.generateButton,
-            isGenerating && styles.generateButtonActive, // rename: it's active, not disabled
+            isGenerating && styles.generateButtonActive,
             pressed && styles.generateButtonPressed,
           ]}
           onPress={handleGenerate}
-          // ← remove disabled entirely
         >
           {isGenerating ? (
             <View style={styles.loadingRow}>
@@ -88,9 +88,16 @@ export default function OutfitScreen() {
               <Text style={styles.generateButtonText}>Cancel AI styling</Text>
             </View>
           ) : (
-            <Text style={styles.generateButtonText}>
-              {result ? "🔄 Regenerate" : "✨ Generate outfit"}
-            </Text>
+            <View style={styles.loadingRow}>
+              {result ? (
+                <IconComponent name={"refresh"} size={18} color="#ebde2a" />
+              ) : (
+                <IconComponent name={"sparkles"} size={18} color="#ebde2a" />
+              )}
+              <Text style={styles.generateButtonText}>
+                {result ? "Regenerate" : "Generate outfit"}
+              </Text>
+            </View>
           )}
         </Pressable>
       </View>

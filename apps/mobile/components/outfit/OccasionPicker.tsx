@@ -1,12 +1,13 @@
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { Occasion, Weather } from "../../hooks/useOutfitGenerator";
+import { IconComponent } from "../ui/Icon";
 
 // ── Occasion options
-const OCCASIONS: { value: Occasion; label: string; emoji: string }[] = [
-  { value: "casual", label: "Casual", emoji: "😎" },
-  { value: "work", label: "Work", emoji: "💼" },
-  { value: "formal", label: "Formal", emoji: "🎩" },
-  { value: "sport", label: "Sport", emoji: "🏃" },
+const OCCASIONS: { value: Occasion; label: string; icon: string }[] = [
+  { value: "casual", label: "Casual", icon: "smile" },
+  { value: "work", label: "Work", icon: "work" },
+  { value: "formal", label: "Formal", icon: "formal" },
+  { value: "sport", label: "Sport", icon: "sport" },
 ];
 
 // ── Weather options
@@ -43,7 +44,7 @@ export function OccasionPicker({
           style={[styles.chip, occasion === null && styles.chipActive]}
           onPress={() => onOccasionChange(null)}
         >
-          <Text style={styles.chipEmoji}>✨</Text>
+          <IconComponent name={"sparkles"} size={20} color="#89d300" />
           <Text
             style={[
               styles.chipLabel,
@@ -62,7 +63,8 @@ export function OccasionPicker({
               onOccasionChange(occasion === o.value ? null : o.value)
             }
           >
-            <Text style={styles.chipEmoji}>{o.emoji}</Text>
+            {/* <Text style={styles.chipEmoji}>{o.emoji}</Text> */}
+            <IconComponent name={o.icon} size={20} color="#89d300" />
             <Text
               style={[
                 styles.chipLabel,
