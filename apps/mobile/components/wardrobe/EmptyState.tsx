@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { IconComponent } from "../ui/Icon";
 
 interface Props {
   // True when the empty state is caused by filters, not a truly empty wardrobe
@@ -11,7 +12,12 @@ export function EmptyState({ isFiltered }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.emoji}>{isFiltered ? "🔍" : "👗"}</Text>
+      {isFiltered && (
+        <IconComponent name={"search"} size={50} color={"#1C1C1E"} />
+      )}
+      {!isFiltered && (
+        <IconComponent name={"shirt"} size={50} color={"#1C1C1E"} />
+      )}
       <Text style={styles.title}>
         {isFiltered ? "No items found" : "Your wardrobe is empty"}
       </Text>

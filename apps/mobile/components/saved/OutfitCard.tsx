@@ -16,11 +16,11 @@ const CARD_WIDTH = SCREEN_WIDTH - 32; // Full width with 16px margin each side
 const COLLAGE_SIZE = CARD_WIDTH - 32; // Collage inside card padding
 
 // Map occasion slug to readable label + emoji
-const OCCASION_LABELS: Record<string, { label: string; emoji: string }> = {
-  casual: { label: "Casual", emoji: "😎" },
-  work: { label: "Work", emoji: "💼" },
-  formal: { label: "Formal", emoji: "🎩" },
-  sport: { label: "Sport", emoji: "🏃" },
+const OCCASION_LABELS: Record<string, { label: string; icon: string }> = {
+  casual: { label: "Casual", icon: "casual" },
+  work: { label: "Work", icon: "work" },
+  formal: { label: "Formal", icon: "formal" },
+  sport: { label: "Sport", icon: "sport" },
 };
 
 interface Props {
@@ -100,9 +100,8 @@ export function OutfitCard({ outfit }: Props) {
           {/* Occasion badge */}
           {occasion && (
             <View style={styles.occasionBadge}>
-              <Text style={styles.occasionText}>
-                {occasion.emoji} {occasion.label}
-              </Text>
+              <IconComponent name={occasion.icon} size={12} color={"#1C1C1E"} />
+              <Text style={styles.occasionText}>{occasion.label}</Text>
             </View>
           )}
         </View>
@@ -211,6 +210,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
   },
   occasionText: {
     fontSize: 12,

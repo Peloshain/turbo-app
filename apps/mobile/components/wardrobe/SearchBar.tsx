@@ -1,4 +1,5 @@
 import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
+import { IconComponent } from "../ui/Icon";
 
 interface Props {
   value: string;
@@ -9,7 +10,7 @@ interface Props {
 export function SearchBar({ value, onChange, onClear }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>🔍</Text>
+      <IconComponent name={"search"} size={16} color="#8E8E93" />
       <TextInput
         style={styles.input}
         placeholder="Search by name or color..."

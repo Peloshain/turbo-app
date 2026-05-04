@@ -4,7 +4,7 @@ import { IconComponent } from "../ui/Icon";
 
 // ── Occasion options
 const OCCASIONS: { value: Occasion; label: string; icon: string }[] = [
-  { value: "casual", label: "Casual", icon: "smile" },
+  { value: "casual", label: "Casual", icon: "casual" },
   { value: "work", label: "Work", icon: "work" },
   { value: "formal", label: "Formal", icon: "formal" },
   { value: "sport", label: "Sport", icon: "sport" },

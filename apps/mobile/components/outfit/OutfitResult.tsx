@@ -128,7 +128,7 @@ export function OutfitResult({
           onPress={onRegenerate}
           disabled={isSaving}
         >
-          <Text style={styles.retryButtonText}>🔄 Try another</Text>
+          <IconComponent name={"recycle"} size={18} color="#1C1C1E" />
         </Pressable>
       </View>
     </View>

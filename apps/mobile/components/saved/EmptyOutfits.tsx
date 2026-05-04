@@ -7,7 +7,7 @@ export function EmptyOutfits() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.emoji}>🗂️</Text>
+      <IconComponent name={"folderClosed"} size={50} color={"#ebde2a"} />
       <Text style={styles.title}>No saved outfits yet</Text>
       <Text style={styles.subtitle}>
         Generate an outfit with AI and save it here to build your collection
@@ -17,7 +17,6 @@ export function EmptyOutfits() {
         onPress={() => router.push("/(tabs)/outfit")}
       >
         <Text style={styles.buttonText}>
-          {" "}
           <IconComponent name={"sparkles"} size={15} color="#ebde2a" />
           Generate my first outfit
         </Text>

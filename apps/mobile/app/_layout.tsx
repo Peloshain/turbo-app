@@ -112,6 +112,13 @@ export default function RootLayout() {
               options={{ presentation: "modal", headerShown: false }}
             />
             <Stack.Screen
+              name="edit-profile/index"
+              options={{
+                headerTitle: "Edit Profile",
+                headerBackTitle: "Profile",
+              }}
+            />
+            <Stack.Screen
               name="item/[id]"
               options={{ headerTitle: "Item", headerBackTitle: "Back" }}
             />
