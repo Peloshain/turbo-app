@@ -11,6 +11,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useDeleteItem } from "../../hooks/useWardrobe";
 import { env } from "@repo/env/native";
+import { IconComponent } from "../../components/ui/Icon";
 
 const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 
@@ -89,7 +90,8 @@ export default function ItemDetailScreen() {
 
         {/* AI badge */}
         <View style={styles.aiBadge}>
-          <Text style={styles.aiBadgeText}>✨ Analyzed by AI</Text>
+          <IconComponent name={"sparkles"} size={16} color="#e7d804" />
+          <Text style={styles.aiBadgeText}>Analyzed by AI</Text>
         </View>
       </View>
 
@@ -163,6 +165,8 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0.1)",
   },
   aiBadge: {
+    flexDirection: "row",
+    gap: 6,
     alignSelf: "flex-start",
     backgroundColor: "#F2F2F7",
     borderRadius: 20,

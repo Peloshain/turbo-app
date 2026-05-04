@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { IconComponent } from "../ui/Icon";
 
 export function EmptyOutfits() {
   const router = useRouter();
@@ -15,7 +16,11 @@ export function EmptyOutfits() {
         style={styles.button}
         onPress={() => router.push("/(tabs)/outfit")}
       >
-        <Text style={styles.buttonText}>✨ Generate my first outfit</Text>
+        <Text style={styles.buttonText}>
+          {" "}
+          <IconComponent name={"sparkles"} size={15} color="#ebde2a" />
+          Generate my first outfit
+        </Text>
       </Pressable>
     </View>
   );

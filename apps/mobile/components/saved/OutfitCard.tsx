@@ -9,6 +9,7 @@ import {
 import { SavedOutfit } from "../../hooks/useSavedOutfits";
 import { useDeleteOutfit } from "../../hooks/useSavedOutfits";
 import { OutfitCollage } from "./OutfitCollage";
+import { IconComponent } from "../ui/Icon";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const CARD_WIDTH = SCREEN_WIDTH - 32; // Full width with 16px margin each side
@@ -60,7 +61,11 @@ export function OutfitCard({ outfit }: Props) {
         <View style={styles.headerLeft}>
           {outfit.aiGenerated && (
             <View style={styles.aiBadge}>
-              <Text style={styles.aiBadgeText}>✨ AI</Text>
+              <Text style={styles.aiBadgeText}>
+                {" "}
+                <IconComponent name={"sparkles"} size={12} color="#ebde2a" />
+                AI
+              </Text>
             </View>
           )}
           <Text style={styles.outfitName} numberOfLines={1}>
@@ -76,7 +81,7 @@ export function OutfitCard({ outfit }: Props) {
           ]}
           hitSlop={8}
         >
-          <Text style={styles.deleteIcon}>🗑</Text>
+          <IconComponent name={"trash"} size={20} color="#e44646" />
         </Pressable>
       </View>
 

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { ImagePickerAsset } from "expo-image-picker";
 import { AnalysisResult } from "../../hooks/useAddItem";
+import { IconComponent } from "../ui/Icon";
 
 interface Props {
   image: ImagePickerAsset;
@@ -47,7 +48,8 @@ export function ConfirmStep({
         <View style={styles.infoCard}>
           {/* AI badge */}
           <View style={styles.aiBadge}>
-            <Text style={styles.aiBadgeText}>✨ AI detected</Text>
+            <IconComponent name={"sparkles"} size={16} color="#e7d804" />
+            <Text style={styles.aiBadgeText}> AI detected</Text>
           </View>
 
           {/* Item name */}
@@ -164,6 +166,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     alignSelf: "flex-start",
+    flexDirection: "row",
+    gap: 6,
   },
   aiBadgeText: {
     color: "#FFFFFF",

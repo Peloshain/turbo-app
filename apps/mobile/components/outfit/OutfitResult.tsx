@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import { GeneratedOutfit } from "../../hooks/useOutfitGenerator";
+import { IconComponent } from "../ui/Icon";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -34,7 +35,10 @@ export function OutfitResult({
       {/* ── Outfit name + reason ── */}
       <View style={styles.header}>
         <View style={styles.aiBadge}>
-          <Text style={styles.aiBadgeText}>✨ AI suggestion</Text>
+          <Text style={styles.aiBadgeText}>
+            <IconComponent name={"sparkles"} size={15} color="#ebde2a" />
+            AI suggestion
+          </Text>
         </View>
         <Text style={styles.outfitName}>{outfit.outfitName}</Text>
         <Text style={styles.reason}>{outfit.reason}</Text>

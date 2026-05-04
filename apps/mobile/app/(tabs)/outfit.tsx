@@ -125,7 +125,8 @@ export default function OutfitScreen() {
       {/* ── Empty state — no result yet ── */}
       {!result && !isGenerating && !error && (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyEmoji}>🪄</Text>
+          <IconComponent name={"wand"} size={52} color="#ebde2a" />
+
           <Text style={styles.emptyTitle}>AI stylist ready</Text>
           <Text style={styles.emptySubtitle}>
             Pick an occasion and weather above, or tap Generate for a surprise

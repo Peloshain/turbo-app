@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import { IconComponent } from "../ui/Icon";
 
 interface Props {
   onPickImage: (source: "camera" | "gallery") => void;
@@ -9,7 +10,7 @@ export function ImagePickerStep({ onPickImage }: Props) {
     <View style={styles.container}>
       {/* Illustration placeholder */}
       <View style={styles.illustration}>
-        <Text style={styles.illustrationEmoji}>👔</Text>
+        <IconComponent name={"shirt"} size={50} color="#000000" />
       </View>
 
       <Text style={styles.title}>Add a clothing item</Text>
@@ -28,7 +29,7 @@ export function ImagePickerStep({ onPickImage }: Props) {
           ]}
           onPress={() => onPickImage("camera")}
         >
-          <Text style={styles.buttonIconLarge}>📷</Text>
+          <IconComponent name={"camera"} size={50} color="#fffefe" />
           <Text style={styles.buttonPrimaryText}>Take a photo</Text>
           <Text style={styles.buttonHint}>Use your camera</Text>
         </Pressable>
@@ -41,7 +42,7 @@ export function ImagePickerStep({ onPickImage }: Props) {
           ]}
           onPress={() => onPickImage("gallery")}
         >
-          <Text style={styles.buttonIconLarge}>🖼️</Text>
+          <IconComponent name={"image"} size={50} color="#1C1C1E" />
           <Text style={styles.buttonSecondaryText}>Choose from gallery</Text>
           <Text style={styles.buttonHintDark}>Pick an existing photo</Text>
         </Pressable>
@@ -50,8 +51,8 @@ export function ImagePickerStep({ onPickImage }: Props) {
       {/* AI notice */}
       <View style={styles.aiNotice}>
         <Text style={styles.aiNoticeText}>
-          ✨ AI will automatically detect color and generate a name for your
-          item
+          <IconComponent name={"sparkles"} size={15} color="#ebde2a" />
+          AI will automatically detect color and generate a name for your item
         </Text>
       </View>
     </View>

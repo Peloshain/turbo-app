@@ -11,10 +11,10 @@ const OCCASIONS: { value: Occasion; label: string; icon: string }[] = [
 ];
 
 // ── Weather options
-const WEATHER_OPTIONS: { value: Weather; label: string; emoji: string }[] = [
-  { value: "hot", label: "Hot", emoji: "☀️" },
-  { value: "mild", label: "Mild", emoji: "🌤️" },
-  { value: "cold", label: "Cold", emoji: "🧊" },
+const WEATHER_OPTIONS: { value: Weather; label: string; icon: string }[] = [
+  { value: "hot", label: "Hot", icon: "hot" },
+  { value: "mild", label: "Mild", icon: "mild" },
+  { value: "cold", label: "Cold", icon: "cold" },
 ];
 
 interface Props {
@@ -44,7 +44,7 @@ export function OccasionPicker({
           style={[styles.chip, occasion === null && styles.chipActive]}
           onPress={() => onOccasionChange(null)}
         >
-          <IconComponent name={"sparkles"} size={20} color="#89d300" />
+          <IconComponent name={"sparkles"} size={20} color="#ebde2a" />
           <Text
             style={[
               styles.chipLabel,
@@ -64,7 +64,7 @@ export function OccasionPicker({
             }
           >
             {/* <Text style={styles.chipEmoji}>{o.emoji}</Text> */}
-            <IconComponent name={o.icon} size={20} color="#89d300" />
+            <IconComponent name={o.icon} size={20} color="#ebde2a" />
             <Text
               style={[
                 styles.chipLabel,
@@ -88,7 +88,7 @@ export function OccasionPicker({
           style={[styles.chip, weather === null && styles.chipActive]}
           onPress={() => onWeatherChange(null)}
         >
-          <Text style={styles.chipEmoji}>🌈</Text>
+          <IconComponent name={"any"} size={20} color="#ebde2a" />
           <Text
             style={[
               styles.chipLabel,
@@ -107,7 +107,7 @@ export function OccasionPicker({
               onWeatherChange(weather === w.value ? null : w.value)
             }
           >
-            <Text style={styles.chipEmoji}>{w.emoji}</Text>
+            <IconComponent name={w.icon} size={20} color="#ebde2a" />
             <Text
               style={[
                 styles.chipLabel,
