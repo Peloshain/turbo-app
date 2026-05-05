@@ -63,28 +63,26 @@ outfitsRouter.post("/generate", async (c) => {
     ? `Context: ${contextParts.join(", ")}.`
     : "Context: everyday casual outfit.";
 
-  const prompt = `You are a personal stylist AI.
+  const prompt = `You are a personal stylist AI. The user has these clothing items in their wardrobe:
 
 ${itemList}
 
 ${context}
 
-Task: Create ONE outfit.
-
+Create a well-coordinated outfit using items from the list above.
 Rules:
-- Pick 2–4 items, all different categories
-- Use ONLY listed item IDs
-- Prioritize color harmony and occasion fit
-- Avoid obvious/common combinations; prefer varied pairings across runs
-- Do not invent items
-- Try to include at least one item that is less frequently selected
+- Choose 2 to 4 items that work well together
+- Prioritize color harmony and style coherence
+- Only use item IDs from the list above
+- Never invent items that are not in the list
+- Don't combine two items of the same category
 
-Respond ONLY with valid JSON:
+Respond ONLY with valid JSON, no extra text:
 {
-  "itemIds": [],
-  "outfitName": "",
-  "reason": "",
-  "styleNote": ""
+  "itemIds": ["id1", "id2", "id3"],
+  "outfitName": "short catchy name for this outfit (max 4 words)",
+  "reason": "one sentence explaining why these items work together",
+  "styleNote": "one practical tip on how to wear this outfit"
 }`;
 
   console.log("AI Prompt:", prompt);
