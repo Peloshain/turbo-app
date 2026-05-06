@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  Switch,
 } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useProfile } from "../../hooks/useProfile";
@@ -24,7 +25,17 @@ function getInitials(name?: string | null) {
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { user, items, stats, loading, error, refetch } = useProfile();
+  const {
+    user,
+    items,
+    stats,
+    loading,
+    error,
+    refetch,
+    aiHelperEnabled,
+    aiToggleLoading,
+    toggleAiHelper,
+  } = useProfile();
 
   useFocusEffect(
     useCallback(() => {
@@ -79,6 +90,30 @@ export default function ProfileScreen() {
         ) : (
           <Text style={styles.emptyText}>No items yet.</Text>
         )}
+      </View>
+
+      {/* ── AI Helper toggle ── */}
+      <View style={styles.card}>
+        <View style={styles.toggleRow}>
+          <View style={styles.toggleText}>
+            <Text style={styles.toggleTitle}>AI Helper</Text>
+            <Text style={styles.toggleSubtitle}>
+              {aiHelperEnabled
+                ? "Auto-detects colors & names, generates outfits"
+                : "Manual entry only, no AI features"}
+            </Text>
+          </View>
+          {aiToggleLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <Switch
+              value={aiHelperEnabled}
+              onValueChange={toggleAiHelper}
+              trackColor={{ false: "#ddd", true: ACCENT }}
+              thumbColor="#fff"
+            />
+          )}
+        </View>
       </View>
 
       {/* Actions */}
@@ -181,4 +216,13 @@ const styles = StyleSheet.create({
     borderColor: RED,
   },
   signOutText: { color: RED, fontSize: 16, fontWeight: "600" },
+  toggleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 16,
+  },
+  toggleText: { flex: 1, gap: 4 },
+  toggleTitle: { fontSize: 16, fontWeight: "600", color: ACCENT },
+  toggleSubtitle: { fontSize: 13, color: MUTED, lineHeight: 18 },
 });

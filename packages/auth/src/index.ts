@@ -33,6 +33,17 @@ export function createAuth() {
       },
     },
     plugins: [expo()],
+    user: {
+      changeEmail: { enabled: true },
+      additionalFields: {
+        aiHelperEnabled: {
+          type: "boolean",
+          defaultValue: true,
+          required: false,
+          input: true,
+        },
+      },
+    },
   });
 }
 
