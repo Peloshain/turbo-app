@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { IconComponent } from "../ui/Icon";
+import { authClient } from "../../lib/auth-client";
 
 interface Props {
   onPickImage: (source: "camera" | "gallery") => void;
 }
 
 export function ImagePickerStep({ onPickImage }: Props) {
+  const { data: session } = authClient.useSession();
+  const aiHelperEnabled = (session?.user as any)?.aiHelperEnabled ?? true;
   return (
     <View style={styles.container}>
       {/* Illustration placeholder */}
@@ -15,8 +18,10 @@ export function ImagePickerStep({ onPickImage }: Props) {
 
       <Text style={styles.title}>Add a clothing item</Text>
       <Text style={styles.subtitle}>
-        Take a photo or choose from your gallery. The AI will detect the color
-        automatically.
+        Take a photo or choose from your gallery.{" "}
+        {aiHelperEnabled
+          ? "The AI will detect the color automatically."
+          : "You can manually specify the color."}
       </Text>
 
       {/* Action buttons */}
@@ -51,8 +56,12 @@ export function ImagePickerStep({ onPickImage }: Props) {
       {/* AI notice */}
       <View style={styles.aiNotice}>
         <Text style={styles.aiNoticeText}>
-          <IconComponent name={"sparkles"} size={15} color="#ebde2a" />
-          AI will automatically detect color and generate a name for your item
+          {aiHelperEnabled && (
+            <IconComponent name={"sparkles"} size={15} color="#ebde2a" />
+          )}
+          {aiHelperEnabled
+            ? "AI will automatically detect color and generate a name for your item"
+            : "You can manually specify the color and name for your item"}
         </Text>
       </View>
     </View>

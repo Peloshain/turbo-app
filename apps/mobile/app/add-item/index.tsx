@@ -106,34 +106,39 @@ export default function AddItemScreen() {
       <View style={styles.progressContainer}>
         {STEPS.map((label, i) => (
           <View key={label} style={styles.progressStep}>
-            <View
-              style={[
-                styles.progressCircle,
-                i < stepIndex && styles.progressCircleDone,
-                i === stepIndex && styles.progressCircleActive,
-              ]}
-            >
-              {i < stepIndex ? (
-                <Text style={styles.progressCheckmark}>✓</Text>
-              ) : (
-                <Text
-                  style={[
-                    styles.progressNumber,
-                    i === stepIndex && styles.progressNumberActive,
-                  ]}
-                >
-                  {i + 1}
-                </Text>
-              )}
+            {/* Circle + label stacked vertically */}
+            <View style={styles.progressStepInner}>
+              <View
+                style={[
+                  styles.progressCircle,
+                  i < stepIndex && styles.progressCircleDone,
+                  i === stepIndex && styles.progressCircleActive,
+                ]}
+              >
+                {i < stepIndex ? (
+                  <Text style={styles.progressCheckmark}>✓</Text>
+                ) : (
+                  <Text
+                    style={[
+                      styles.progressNumber,
+                      i === stepIndex && styles.progressNumberActive,
+                    ]}
+                  >
+                    {i + 1}
+                  </Text>
+                )}
+              </View>
+              <Text
+                style={[
+                  styles.progressLabel,
+                  i === stepIndex && styles.progressLabelActive,
+                ]}
+                numberOfLines={1}
+              >
+                {label}
+              </Text>
             </View>
-            <Text
-              style={[
-                styles.progressLabel,
-                i === stepIndex && styles.progressLabelActive,
-              ]}
-            >
-              {label}
-            </Text>
+            {/* Connector line — flex so it fills available space */}
             {i < STEPS.length - 1 && (
               <View
                 style={[
@@ -220,15 +225,18 @@ const styles = StyleSheet.create({
   progressContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
     paddingVertical: 20,
-    paddingHorizontal: 40,
-    gap: 0,
+    paddingHorizontal: 12,
   },
   progressStep: {
-    alignItems: "center",
     flexDirection: "row",
-    gap: 6,
+    alignItems: "center",
+    flexShrink: 1,
+    flexGrow: 0,
+  },
+  progressStepInner: {
+    alignItems: "center",
+    gap: 4,
   },
   progressCircle: {
     width: 28,
@@ -262,16 +270,18 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   progressLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#8E8E93",
     fontWeight: "500",
+    maxWidth: 56,
+    textAlign: "center",
   },
   progressLabelActive: {
     color: "#1C1C1E",
     fontWeight: "600",
   },
   progressLine: {
-    width: 36,
+    flex: 1,
     height: 1.5,
     backgroundColor: "#E5E5EA",
     marginHorizontal: 4,

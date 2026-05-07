@@ -11,6 +11,7 @@ import {
 import { ImagePickerAsset } from "expo-image-picker";
 import { useQuery } from "@tanstack/react-query";
 import { env } from "@repo/env/native";
+import { authClient } from "../../lib/auth-client";
 
 interface Category {
   id: string;
@@ -50,6 +51,8 @@ export function CategoryPickerStep({
   onSelectCategory,
   onCancelAnalysis,
 }: Props) {
+  const { data: session } = authClient.useSession();
+  const aiHelperEnabled = (session?.user as any)?.aiHelperEnabled ?? true;
   const { data: categories, isLoading: loadingCategories } = useCategories();
   if (loadingCategories) {
     return (
@@ -87,7 +90,9 @@ export function CategoryPickerStep({
       )}
       <Text style={styles.title}>What type of item is this?</Text>
       <Text style={styles.subtitle}>
-        Select a category to help the AI understand your item
+        {aiHelperEnabled
+          ? "Select a category to help the AI understand your item"
+          : "Select a category for your item"}
       </Text>
       {/* Category grid */}
       <FlatList

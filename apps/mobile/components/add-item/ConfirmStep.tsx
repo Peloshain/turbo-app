@@ -36,8 +36,9 @@ export function ConfirmStep({
     <View style={styles.container}>
       <Text style={styles.title}>Looks good?</Text>
       <Text style={styles.subtitle}>
-        Review what the {aiHelperEnabled ? "AI" : "manual"} detected. You can
-        always edit this later.
+        {aiHelperEnabled
+          ? "Review what the AI detected. You can always edit this later."
+          : "Review the details you provided. You can always edit this later."}
       </Text>
 
       {/* Image + color swatch side by side */}
