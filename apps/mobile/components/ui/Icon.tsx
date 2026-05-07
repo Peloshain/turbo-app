@@ -18,6 +18,7 @@ import {
   Recycle,
   Search,
   FolderClosed,
+  Hand,
 } from "lucide-react-native";
 
 import { Icon } from "lucide-react-native";
@@ -34,6 +35,7 @@ export function IconComponent({ name, color, size }: TabIconProps) {
 
   if (name === "wardrobe") return <Icon iconNode={wardrobe} {...props} />;
   if (name === "generate") return <Sparkle {...props} />;
+  if (name === "generate-off") return <Hand {...props} color="#8E8E93" />;
   if (name === "profile") return <User {...props} />;
   if (name === "sparkles") return <Sparkles {...props} />;
   if (name === "refresh") return <RefreshCcw {...props} />;

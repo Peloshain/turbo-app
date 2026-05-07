@@ -11,44 +11,11 @@ import { useRouter } from "expo-router";
 import { authClient } from "../../lib/auth-client";
 import { IconComponent } from "../../components/ui/Icon";
 
-// Simple icons with emojis (temp)
-// function TabIcon({
-//   emoji,
-//   label,
-//   focused,
-// }: {
-//   emoji: string;
-//   label: string;
-//   focused: boolean;
-// }) {
-//   return (
-//     <View style={styles.tabItem}>
-//       <Text style={[styles.tabEmoji, focused && styles.tabEmojiActive]}>
-//         {emoji}
-//       </Text>
-//       <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>
-//         {label}
-//       </Text>
-//     </View>
-//   );
-// }
-
-function LogOutButton() {
-  async function handleSignOut() {
-    await authClient.signOut();
-    // Session clears → root _layout redirects to (auth)/sign-in
-  }
-
-  return (
-    <TouchableOpacity onPress={handleSignOut} style={styles.button}>
-      <Text style={styles.text}>Log out</Text>
-    </TouchableOpacity>
-  );
-}
-
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const aiHelperEnabled = (session?.user as any)?.aiHelperEnabled ?? true;
 
   return (
     <Tabs
@@ -86,13 +53,16 @@ export default function TabsLayout() {
         name="outfit"
         options={{
           headerTitle: "Build Outfit",
-          tabBarIcon: ({ focused }) => (
-            <IconComponent
-              name="generate"
-              color={focused ? "#1C1C1E" : "#8E8E93"}
-              size={24}
-            />
-          ),
+          tabBarIcon: ({ focused }) => {
+            const iconName = aiHelperEnabled ? "generate" : "generate-off";
+            return (
+              <IconComponent
+                name={iconName}
+                color={focused ? "#1C1C1E" : "#8E8E93"}
+                size={24}
+              />
+            );
+          },
         }}
       />
       <Tabs.Screen
