@@ -15,6 +15,7 @@ export function createAuth() {
       env.CORS_ORIGIN,
       ...[
         "exp://",
+        "mobile://",
         "exp://**",
         "exp://192.168.*.*:*/**",
         "http://localhost:8081",
