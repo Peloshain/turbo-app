@@ -5,15 +5,14 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  ActivityIndicator,
   Alert,
-  Image,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAddItem } from "../../hooks/useAddItem";
 import { ImagePickerStep } from "../../components/add-item/ImagePickerStep";
 import { CategoryPickerStep } from "../../components/add-item/CategoryPickerStep";
+import { DetailsStep } from "../../components/add-item/DetailStep";
 import { ConfirmStep } from "../../components/add-item/ConfirmStep";
 import { authClient } from "../../lib/auth-client";
 
@@ -21,13 +20,22 @@ export default function AddItemScreen() {
   const { data: session } = authClient.useSession();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+
   const {
     image,
     analysis,
     loading,
     step,
+    aiHelperEnabled,
+    manualName,
+    manualColorDesc,
+    manualColorHex,
+    setManualName,
+    setManualColorDesc,
+    setManualColorHex,
     pickImage,
     analyzeWithCategory,
+    confirmManualDetails,
     saveItem,
     reset,
     cancelAnalysis,
@@ -39,9 +47,22 @@ export default function AddItemScreen() {
     icon: string;
   } | null>(null);
 
-  // Step labels shown in the top progress bar
-  const STEPS = ["Photo", "Category", "Confirm"];
-  const stepIndex = step === "pick" ? 0 : step === "category" ? 1 : 2;
+  // AI mode: Photo → Category → Confirm (3 steps)
+  // Manual mode: Photo → Category → Details → Confirm (4 steps)
+  const STEPS = aiHelperEnabled
+    ? ["Photo", "Category", "Confirm"]
+    : ["Photo", "Category", "Details", "Confirm"];
+
+  const stepIndex =
+    step === "pick"
+      ? 0
+      : step === "category"
+        ? 1
+        : step === "details"
+          ? 2
+          : aiHelperEnabled
+            ? 2 // confirm in AI mode
+            : 3; // confirm in manual mode
 
   function handleClose() {
     reset();
@@ -63,12 +84,13 @@ export default function AddItemScreen() {
       Alert.alert("Not signed in", "Please sign in to save items.");
       return;
     }
-    await saveItem(selectedCategory.id, session?.user.id);
+    await saveItem(selectedCategory.id, session.user.id);
     Alert.alert("Done!", "Item added to your wardrobe.", [
       { text: "Add another", onPress: reset },
       { text: "Done", onPress: handleClose },
     ]);
   }
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* ── Header ── */}
@@ -84,7 +106,6 @@ export default function AddItemScreen() {
       <View style={styles.progressContainer}>
         {STEPS.map((label, i) => (
           <View key={label} style={styles.progressStep}>
-            {/* Step circle */}
             <View
               style={[
                 styles.progressCircle,
@@ -105,7 +126,6 @@ export default function AddItemScreen() {
                 </Text>
               )}
             </View>
-            {/* Step label */}
             <Text
               style={[
                 styles.progressLabel,
@@ -114,7 +134,6 @@ export default function AddItemScreen() {
             >
               {label}
             </Text>
-            {/* Connector line between steps */}
             {i < STEPS.length - 1 && (
               <View
                 style={[
@@ -143,6 +162,19 @@ export default function AddItemScreen() {
           />
         )}
 
+        {/* Manual details step — only shown when aiHelperEnabled is false */}
+        {step === "details" && (
+          <DetailsStep
+            name={manualName}
+            colorDesc={manualColorDesc}
+            colorHex={manualColorHex}
+            onNameChange={setManualName}
+            onColorDescChange={setManualColorDesc}
+            onColorHexChange={setManualColorHex}
+            onNext={confirmManualDetails}
+          />
+        )}
+
         {step === "confirm" && image && analysis && (
           <ConfirmStep
             image={image}
@@ -164,8 +196,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FAFAF9",
   },
-
-  // ── Header
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -187,8 +217,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#8E8E93",
   },
-
-  // ── Progress bar
   progressContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -251,8 +279,6 @@ const styles = StyleSheet.create({
   progressLineDone: {
     backgroundColor: "#34C759",
   },
-
-  // ── Content area
   content: {
     flexGrow: 1,
     paddingHorizontal: 20,

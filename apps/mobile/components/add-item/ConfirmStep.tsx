@@ -9,6 +9,7 @@ import {
 import { ImagePickerAsset } from "expo-image-picker";
 import { AnalysisResult } from "../../hooks/useAddItem";
 import { IconComponent } from "../ui/Icon";
+import { authClient } from "../../lib/auth-client";
 
 interface Props {
   image: ImagePickerAsset;
@@ -29,11 +30,14 @@ export function ConfirmStep({
   onSave,
   onBack,
 }: Props) {
+  const { data: session } = authClient.useSession();
+  const aiHelperEnabled = (session?.user as any)?.aiHelperEnabled ?? true;
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Looks good?</Text>
       <Text style={styles.subtitle}>
-        Review what the AI detected. You can always edit this later.
+        Review what the {aiHelperEnabled ? "AI" : "manual"} detected. You can
+        always edit this later.
       </Text>
 
       {/* Image + color swatch side by side */}
@@ -48,8 +52,12 @@ export function ConfirmStep({
         <View style={styles.infoCard}>
           {/* AI badge */}
           <View style={styles.aiBadge}>
-            <IconComponent name={"sparkles"} size={16} color="#e7d804" />
-            <Text style={styles.aiBadgeText}> AI detected</Text>
+            {aiHelperEnabled && (
+              <IconComponent name={"sparkles"} size={16} color="#e7d804" />
+            )}
+            <Text style={styles.aiBadgeText}>
+              {aiHelperEnabled ? "AI detected" : "Manual"}
+            </Text>
           </View>
 
           {/* Item name */}
