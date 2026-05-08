@@ -28,6 +28,7 @@ export default function ProfileScreen() {
   const {
     user,
     items,
+    outfits,
     stats,
     loading,
     error,
@@ -69,9 +70,15 @@ export default function ProfileScreen() {
 
       {/* Stats */}
       <View style={styles.card}>
-        <View style={styles.totalRow}>
-          <Text style={styles.totalCount}>{items.length}</Text>
-          <Text style={styles.totalLabel}>items in wardrobe</Text>
+        <View style={styles.sumarizedStats}>
+          <View style={styles.totalRow}>
+            <Text style={styles.totalCount}>{items.length}</Text>
+            <Text style={styles.totalLabel}>items in wardrobe</Text>
+          </View>
+          <View style={styles.totalRow}>
+            <Text style={styles.totalCount}>{outfits.length}</Text>
+            <Text style={styles.totalLabel}>outfits created</Text>
+          </View>
         </View>
 
         {loading ? (
@@ -168,6 +175,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
+  sumarizedStats: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   totalRow: {
     flexDirection: "row",
     alignItems: "baseline",
@@ -175,12 +188,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   totalCount: {
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: "800",
     color: ACCENT,
     letterSpacing: -1,
   },
-  totalLabel: { fontSize: 15, color: MUTED },
+  totalLabel: { fontSize: 13, color: MUTED, flexShrink: 1 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
   statCell: {
     backgroundColor: "#F7F7F5",

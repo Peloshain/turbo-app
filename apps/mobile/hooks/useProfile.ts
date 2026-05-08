@@ -7,6 +7,7 @@ const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 
 type Category = { id: string; name: string; slug: string };
 type Item = { id: string; category: Category };
+type Outfit = { id: string; name: string; items: Item[] };
 export type StatRow = { label: string; count: number };
 
 export function useProfile() {
@@ -15,7 +16,7 @@ export function useProfile() {
 
   const [aiToggleLoading, setAiToggleLoading] = useState(false);
 
-  const [itemsQuery, categoriesQuery] = useQueries({
+  const [itemsQuery, categoriesQuery, outfitsQuery] = useQueries({
     queries: [
       {
         queryKey: ["profile-items", user?.id],
@@ -35,11 +36,19 @@ export function useProfile() {
         enabled: !!user?.id,
         staleTime: 0,
       },
+      {
+        queryKey: ["outfits"],
+        queryFn: () =>
+          fetch(`${API_URL}/outfits/user/${user!.id}`)
+            .then((r) => r.json())
+            .then((d) => d.outfits),
+      },
     ],
   });
 
   const items: Item[] = itemsQuery.data ?? [];
   const categories: Category[] = categoriesQuery.data ?? [];
+  const outfits: Outfit[] = outfitsQuery.data ?? [];
 
   const stats: StatRow[] = categories
     .map((cat) => ({
@@ -51,7 +60,8 @@ export function useProfile() {
   const refetch = useCallback(() => {
     itemsQuery.refetch();
     categoriesQuery.refetch();
-  }, [itemsQuery.refetch, categoriesQuery.refetch]);
+    outfitsQuery.refetch();
+  }, [itemsQuery.refetch, categoriesQuery.refetch, outfitsQuery.refetch]);
 
   // aiHelperEnabled falls back to true for existing users without the field
   const aiHelperEnabled = (user as any)?.aiHelperEnabled ?? true;
@@ -72,10 +82,14 @@ export function useProfile() {
   return {
     user,
     items,
+    outfits,
     stats,
-    loading: itemsQuery.isLoading || categoriesQuery.isLoading,
+    loading:
+      itemsQuery.isLoading ||
+      categoriesQuery.isLoading ||
+      outfitsQuery.isLoading,
     error:
-      itemsQuery.isError || categoriesQuery.isError
+      itemsQuery.isError || categoriesQuery.isError || outfitsQuery.isError
         ? "Failed to load stats."
         : null,
     refetch,
