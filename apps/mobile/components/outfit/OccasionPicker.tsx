@@ -1,8 +1,8 @@
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { Occasion, Weather } from "../../hooks/useOutfitGenerator";
 import { IconComponent } from "../ui/Icon";
+import { Fragment } from "react/jsx-runtime";
 
-// ── Occasion options
 const OCCASIONS: { value: Occasion; label: string; icon: string }[] = [
   { value: "casual", label: "Casual", icon: "casual" },
   { value: "work", label: "Work", icon: "work" },
@@ -10,7 +10,6 @@ const OCCASIONS: { value: Occasion; label: string; icon: string }[] = [
   { value: "sport", label: "Sport", icon: "sport" },
 ];
 
-// ── Weather options
 const WEATHER_OPTIONS: { value: Weather; label: string; icon: string }[] = [
   { value: "hot", label: "Hot", icon: "hot" },
   { value: "mild", label: "Mild", icon: "mild" },
@@ -22,6 +21,7 @@ interface Props {
   weather: Weather | null;
   onOccasionChange: (v: Occasion | null) => void;
   onWeatherChange: (v: Weather | null) => void;
+  showWeather?: boolean; // explicit control — defaults to true
 }
 
 export function OccasionPicker({
@@ -29,6 +29,7 @@ export function OccasionPicker({
   weather,
   onOccasionChange,
   onWeatherChange,
+  showWeather = true,
 }: Props) {
   return (
     <View style={styles.container}>
@@ -39,7 +40,6 @@ export function OccasionPicker({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.row}
       >
-        {/* "Any" option deselects */}
         <Pressable
           style={[styles.chip, occasion === null && styles.chipActive]}
           onPress={() => onOccasionChange(null)}
@@ -63,7 +63,6 @@ export function OccasionPicker({
               onOccasionChange(occasion === o.value ? null : o.value)
             }
           >
-            {/* <Text style={styles.chipEmoji}>{o.emoji}</Text> */}
             <IconComponent name={o.icon} size={20} color="#ebde2a" />
             <Text
               style={[
@@ -77,48 +76,52 @@ export function OccasionPicker({
         ))}
       </ScrollView>
 
-      {/* ── Weather row ── */}
-      <Text style={[styles.sectionLabel, { marginTop: 16 }]}>Weather</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.row}
-      >
-        <Pressable
-          style={[styles.chip, weather === null && styles.chipActive]}
-          onPress={() => onWeatherChange(null)}
-        >
-          <IconComponent name={"any"} size={20} color="#ebde2a" />
-          <Text
-            style={[
-              styles.chipLabel,
-              weather === null && styles.chipLabelActive,
-            ]}
+      {/* ── Weather row — only shown when showWeather is true ── */}
+      {showWeather && (
+        <Fragment>
+          <Text style={[styles.sectionLabel, { marginTop: 16 }]}>Weather</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.row}
           >
-            Any
-          </Text>
-        </Pressable>
-
-        {WEATHER_OPTIONS.map((w) => (
-          <Pressable
-            key={w.value}
-            style={[styles.chip, weather === w.value && styles.chipActive]}
-            onPress={() =>
-              onWeatherChange(weather === w.value ? null : w.value)
-            }
-          >
-            <IconComponent name={w.icon} size={20} color="#ebde2a" />
-            <Text
-              style={[
-                styles.chipLabel,
-                weather === w.value && styles.chipLabelActive,
-              ]}
+            <Pressable
+              style={[styles.chip, weather === null && styles.chipActive]}
+              onPress={() => onWeatherChange(null)}
             >
-              {w.label}
-            </Text>
-          </Pressable>
-        ))}
-      </ScrollView>
+              <IconComponent name={"any"} size={20} color="#ebde2a" />
+              <Text
+                style={[
+                  styles.chipLabel,
+                  weather === null && styles.chipLabelActive,
+                ]}
+              >
+                Any
+              </Text>
+            </Pressable>
+
+            {WEATHER_OPTIONS.map((w) => (
+              <Pressable
+                key={w.value}
+                style={[styles.chip, weather === w.value && styles.chipActive]}
+                onPress={() =>
+                  onWeatherChange(weather === w.value ? null : w.value)
+                }
+              >
+                <IconComponent name={w.icon} size={20} color="#ebde2a" />
+                <Text
+                  style={[
+                    styles.chipLabel,
+                    weather === w.value && styles.chipLabelActive,
+                  ]}
+                >
+                  {w.label}
+                </Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </Fragment>
+      )}
     </View>
   );
 }
