@@ -363,6 +363,7 @@ export function useAddItem() {
           imageKey: key,
           categoryId,
           userId,
+          aiAnalyzed: aiHelperEnabled,
         }),
       });
 

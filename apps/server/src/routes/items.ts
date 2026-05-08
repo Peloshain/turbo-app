@@ -96,11 +96,28 @@ itemsRouter.post("/upload-url", async (c) => {
 
 // Save analized item
 itemsRouter.post("/", async (c) => {
-  const { name, imageUrl, imageKey, colorDesc, colorHex, categoryId, userId } =
-    await c.req.json();
+  const {
+    name,
+    imageUrl,
+    imageKey,
+    colorDesc,
+    colorHex,
+    categoryId,
+    userId,
+    aiAnalyzed,
+  } = await c.req.json();
 
   const item = await db.item.create({
-    data: { name, imageUrl, imageKey, colorDesc, colorHex, categoryId, userId },
+    data: {
+      name,
+      imageUrl,
+      imageKey,
+      colorDesc,
+      colorHex,
+      categoryId,
+      userId,
+      aiAnalyzed,
+    },
     include: { category: true },
   });
 

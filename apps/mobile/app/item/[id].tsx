@@ -90,8 +90,12 @@ export default function ItemDetailScreen() {
 
         {/* AI badge */}
         <View style={styles.aiBadge}>
-          <IconComponent name={"sparkles"} size={16} color="#e7d804" />
-          <Text style={styles.aiBadgeText}>Analyzed by AI</Text>
+          {item.aiAnalyzed && (
+            <IconComponent name={"sparkles"} size={16} color="#e7d804" />
+          )}
+          <Text style={styles.aiBadgeText}>
+            {item.aiAnalyzed ? "Analyzed by AI" : "Not analyzed by AI"}
+          </Text>
         </View>
       </View>
 
