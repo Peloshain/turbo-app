@@ -27,7 +27,9 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.mobile",
-      "permissions": ["android.permission.RECORD_AUDIO"]
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,7 +42,8 @@
           "photosPermission": "Wardrobe needs access to your photos to add clothing items.",
           "cameraPermission": "Wardrobe needs camera access to photograph your clothing."
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "extra": {
       "router": {},
