@@ -8,7 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_SERVER_URL": "http://10.0.2.2:3000"
+        "EXPO_PUBLIC_SERVER_URL": "https://victor-strategic-focus-epa.trycloudflare.com"
       }
     },
     "preview": {
