@@ -5,7 +5,7 @@
     "scheme": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/sparkly_Hanger.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -14,17 +14,20 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.mobile"
+      "bundleIdentifier": "com.anonymous.mobile",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#F5F1EA",
+        "foregroundImage": "./assets/hanger-icon-foreground.png",
+        "monochromeImage": "./assets/hanger-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.mobile"
+      "package": "com.anonymous.mobile",
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,6 +41,12 @@
           "cameraPermission": "Wardrobe needs camera access to photograph your clothing."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "01ea4e8f-8ca6-4795-92b2-2322af954dd7"
+      }
+    }
   }
 }
