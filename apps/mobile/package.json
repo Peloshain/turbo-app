@@ -17,6 +17,7 @@
     "better-auth": "catalog:",
     "expo": "~55.0.23",
     "expo-constants": "~55.0.16",
+    "expo-dev-client": "~55.0.32",
     "expo-file-system": "~55.0.19",
     "expo-image-picker": "~55.0.20",
     "expo-linking": "~55.0.15",
