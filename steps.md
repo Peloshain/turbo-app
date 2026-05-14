@@ -69,8 +69,8 @@ pnpm prisma migrate dev
 
 ### Need to add the adapter to create the PrismaClient to avoid th error `PrismaClientInitializationError: `PrismaClient` needs to be constructed with a non-empty, valid 'PrismaClientOptions'`
 
-# Create AI package
-
+ <!-- # Create AI package
+ 
 ```sh
 mkdir -p packages/ai/src
 cd packages/ai
@@ -78,7 +78,7 @@ pnpm init
 pnpm add openai @anthropic-ai/sdk
 ```
 
-## Create `packages/ai/src/index.ts` with the AI configurations
+## Create `packages/ai/src/index.ts` with the AI configurations-->
 
 # Create Storage package
 
@@ -96,6 +96,14 @@ pnpm add @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 ### important, add the dependencies from the packages to use them in apps
 
 `add "workspace:*" in package.json dependencies..`
+
+### add the export node to the package.json
+
+```ts
+  "exports": {
+    ".": "./src/index.ts"
+  },
+```
 
 ### if dependencies don't show up after pnpm install, remove node_modules
 
@@ -127,6 +135,21 @@ pnpm add -D tsx
 "dev": "bun run --hot src/index.ts"
 ```
 
+# AI Service (strategy/adapter)
+
+```text
+apps/api/src/
+  services/
+    ai/
+      types.ts          ← AIService
+      factory.ts        ← generate the adapter with .env variable
+      gemini.adapter.ts ← gemini implementation
+  routes/
+    analyze.ts          ← Hono route
+```
+
+## Create Interfaz `AIService`
+
 # Create Expo App (apps)
 
 ```sh
@@ -138,6 +161,43 @@ npx create-expo-app mobile --template blank-typescript
 
 ```ts
 "dev": "expo start",
+```
+
+## Add navigation
+
+```sh
+cd apps/mobile
+npx expo install expo-router expo-linking expo-constants expo-status-bar react-native-safe-area-context react-native-screens
+```
+
+## Update the entry point in `package.json`
+
+```json
+{
+  "main": "expo-router/entry"
+}
+```
+
+## Make sure that `app.json` has the plugin
+
+```json
+ "plugins": ["expo-router"]
+```
+
+## File structure in `apps/mobile/app`
+
+```Plain
+apps/mobile/app/
+├── _layout.tsx          ← root layout (providers, fonts)
+├── (tabs)/
+│   ├── _layout.tsx      ← tab bar with 3 tabs
+│   ├── index.tsx        ← Wardrobe (index)
+│   ├── outfit.tsx       ← Outfit with AI
+│   └── saved.tsx        ← My Outfits
+├── add-item/
+│   └── index.tsx        ← Add Item
+└── item/
+    └── [id].tsx         ← Item detail
 ```
 
 # Git
@@ -202,4 +262,53 @@ git push -u origin main
 
 ```sh
 gh auth login
+```
+
+# Android emulator
+
+## localhost aims to the emulator not the PC IP
+
+```typescript
+const API_URL = Platform.select({
+  android: "http://10.0.2.2:3000",
+  ios: process.env.EXPO_PUBLIC_API_URL,
+});
+```
+
+## OpenSSL
+
+```bash
+openssl rand -hex 32
+```
+
+## ./gradlew clean
+
+# EAS DEPLOY
+
+## Eas Build for android
+
+```bash
+eas build --platform android --profile preview --clear-cache
+```
+
+## EAS env create (creating EXPO_PUBLIC_SERVER_URL)
+
+```bash
+eas env:create --name EXPO_PUBLIC_SERVER_URL --value https://preview-api.myapp.com --environment preview
+```
+
+## eas.json must remove the env node
+
+```typescript
+{
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "environment": "preview"
+    }
+  }
+}
 ```

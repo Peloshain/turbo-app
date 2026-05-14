@@ -1,9 +1,18 @@
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
+import { env } from "@repo/env/server";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-export const db = globalForPrisma.prisma ?? new PrismaClient();
+function createPrismaClient() {
+  const adapter = new PrismaPg({
+    connectionString: env.DATABASE_URL,
+  });
+  return new PrismaClient({ adapter });
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+export const db = globalForPrisma.prisma ?? createPrismaClient();
 
-export * from "@prisma/client";
+if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+
+export * from "../generated/prisma/client";

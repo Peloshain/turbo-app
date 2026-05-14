@@ -20,14 +20,14 @@ model Category {
   items Item[]
 }
 
-model User {
-  id        String   @id @default(uuid()) @db.Uuid 
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  items     Item[]
-  outfits   Outfit[]
-}
+// model User {
+//   id        String   @id @default(uuid()) @db.Uuid 
+//   email     String   @unique
+//   name      String?
+//   createdAt DateTime @default(now())
+//   items     Item[]
+//   outfits   Outfit[]
+// }
 
 model Item {
   id          String   @id @default(uuid()) @db.Uuid
@@ -38,8 +38,9 @@ model Item {
   colorHex    String?                 
   categoryId  String   @db.Uuid
   category    Category @relation(fields: [categoryId], references: [id])
-  userId      String   @db.Uuid
+  userId      String   
   user        User     @relation(fields: [userId], references: [id])
+  aiAnalyzed  Boolean  @default(true)
   createdAt   DateTime @default(now())
   outfitItems OutfitItem[]
 }
@@ -49,7 +50,7 @@ model Outfit {
   name        String?
   occasion    String?
   aiGenerated Boolean     @default(false)
-  userId      String      @db.Uuid
+  userId      String     
   user        User        @relation(fields: [userId], references: [id])
   items       OutfitItem[]
   createdAt   DateTime    @default(now())

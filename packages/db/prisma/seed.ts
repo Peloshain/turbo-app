@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+// import { env } from "@repo/env/server";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -25,13 +26,10 @@ const categories = [
 
 async function main() {
   console.log("seeding categories...");
-  for (const cat of categories) {
-    await db.category.createMany({
-      data: categories,
-      skipDuplicates: true,
-    });
-  }
-
+  await db.category.createMany({
+    data: categories,
+    skipDuplicates: true,
+  });
   console.log("seed completed");
 }
 
