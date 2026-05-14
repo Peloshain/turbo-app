@@ -8,16 +8,13 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_SERVER_URL": "https://victor-strategic-focus-epa.trycloudflare.com"
+        "EXPO_PUBLIC_SERVER_URL": "https://solve-conversation-robots-scene.trycloudflare.com"
       }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
-      },
-      "env": {
-        "EXPO_PUBLIC_SERVER_URL": "https://victor-strategic-focus-epa.trycloudflare.com"
       }
     },
     "production": {

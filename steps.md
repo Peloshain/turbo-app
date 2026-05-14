@@ -282,3 +282,33 @@ openssl rand -hex 32
 ```
 
 ## ./gradlew clean
+
+# EAS DEPLOY
+
+## Eas Build for android
+
+```bash
+eas build --platform android --profile preview --clear-cache
+```
+
+## EAS env create (creating EXPO_PUBLIC_SERVER_URL)
+
+```bash
+eas env:create --name EXPO_PUBLIC_SERVER_URL --value https://preview-api.myapp.com --environment preview
+```
+
+## eas.json must remove the env node
+
+```typescript
+{
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "environment": "preview"
+    }
+  }
+}
+```
