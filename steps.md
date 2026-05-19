@@ -312,3 +312,11 @@ eas env:create --name EXPO_PUBLIC_SERVER_URL --value https://preview-api.myapp.c
   }
 }
 ```
+
+## eas env variables
+
+<!-- If you have any env stored in expo.dev you need to update them  -->
+
+```bash
+eas update --environment ${current_environment}
+```

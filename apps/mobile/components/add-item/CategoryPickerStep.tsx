@@ -28,10 +28,7 @@ interface Props {
 }
 
 //Useful for Android emulator
-const API_URL = Platform.select({
-  android: "http://10.0.2.2:3000",
-  ios: env.EXPO_PUBLIC_SERVER_URL,
-});
+const API_URL = env.EXPO_PUBLIC_SERVER_URL;
 
 // Fetch categories from the API
 function useCategories() {

@@ -107,6 +107,18 @@ itemsRouter.post("/", async (c) => {
     aiAnalyzed,
   } = await c.req.json();
 
+  console.log(
+    `[SAVE ITEM] Received data: ${JSON.stringify({
+      name,
+      imageUrl,
+      imageKey,
+      colorDesc,
+      colorHex,
+      categoryId,
+      userId,
+      aiAnalyzed,
+    })}`,
+  );
   const item = await db.item.create({
     data: {
       name,
