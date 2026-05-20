@@ -101,6 +101,6 @@ app.route("/categories", categoriesRouter);
 app.route("/outfits", outfitsRouter);
 
 // Health check
-app.get("/", (c) => c.json({ status: "ok" }));
+app.get("/health", (c) => c.json({ status: "ok" }));
 
 export default app;

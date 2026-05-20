@@ -1,0 +1,27 @@
+FROM oven/bun:1 AS base
+WORKDIR /app
+
+# Copy root manifest and lockfile first (better layer caching)
+COPY package.json bun.lockb ./
+COPY apps/server/package.json ./apps/server/
+# Copy all internal workspace packages your server depends on
+COPY packages/ ./packages/
+
+# Install all dependencies
+RUN bun install --frozen-lockfile
+
+# Copy the rest of the source
+COPY apps/server ./apps/server
+
+# Generate Prisma client
+RUN bunx prisma generate --schema=packages/db/prisma/schema.prisma
+
+# ---- runner ----
+FROM oven/bun:1 AS runner
+WORKDIR /app
+
+COPY --from=base /app .
+
+EXPOSE 3000
+
+CMD ["bun", "apps/server/src/index.ts"]
