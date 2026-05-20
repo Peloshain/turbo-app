@@ -24,7 +24,7 @@ RUN pnpm --filter @repo/db exec prisma generate --schema=prisma/schema.prisma
 RUN pnpm --filter @repo/db exec prisma generate --schema=prisma/auth.prisma
 
 # Build the server
-RUN pnpm --filter server build
+RUN pnpm --filter api build && ls /app/apps/server/dist
 
 EXPOSE 3000
 
