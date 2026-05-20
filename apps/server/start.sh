@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
-npx prisma migrate deploy --schema=/app/packages/db/prisma/schema.prisma
-npx prisma migrate deploy --schema=/app/packages/db/prisma/auth.prisma
+cd /app/packages/db
+npx prisma migrate deploy --config=prisma.config.ts
+cd /app
 exec node /app/apps/server/dist/index.js

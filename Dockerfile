@@ -20,8 +20,7 @@ COPY apps/server ./apps/server
 COPY packages ./packages
 
 # Generate Prisma clients for both schemas
-RUN pnpm --filter @repo/db exec prisma generate --schema=prisma/schema.prisma
-RUN pnpm --filter @repo/db exec prisma generate --schema=prisma/auth.prisma
+RUN pnpm --filter @repo/db exec prisma generate --config=prisma.config.ts
 
 # Build the server
 RUN pnpm --filter api build && ls /app/apps/server/dist
