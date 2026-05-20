@@ -2,6 +2,6 @@
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "bun apps/server/src/index.ts"
+startCommand = "sh apps/server/start.sh"
 healthcheckPath = "/health"
 restartPolicyType = "on_failure"
