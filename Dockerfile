@@ -16,16 +16,20 @@ COPY packages/env/package.json ./packages/env/
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy source
+# Copy ALL source FIRST
 COPY apps/server ./apps/server
 COPY packages ./packages
 
-# Generate Prisma clients for both schemas
+# Generate AFTER source is in place
 RUN pnpm --filter @repo/db exec prisma generate --config=prisma.config.ts
 
+# Verify the generated client exists
+RUN ls /app/packages/db/generated/prisma/
+
 # Build the server
+RUN pnpm --filter api add -D tsup
 RUN pnpm --filter api build && ls /app/apps/server/dist
 
 EXPOSE 3000
 
-CMD ["sh", "apps/server/start.sh"]
+CMD ["sh", "/app/apps/server/start.sh"]
