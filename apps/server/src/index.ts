@@ -17,6 +17,8 @@ import { appRouter } from "@repo/api/routers/index";
 
 const app = new Hono();
 
+app.get("/health", (c) => c.json({ ok: true }));
+
 app.use(
   "/*",
   cors({
@@ -87,8 +89,6 @@ app.put("/uploads/*", async (c) => {
 app.route("/items", itemsRouter);
 app.route("/categories", categoriesRouter);
 app.route("/outfits", outfitsRouter);
-
-app.get("/health", (c) => c.json({ ok: true }));
 
 // Start the server
 serve(
