@@ -1,6 +1,6 @@
 import { mkdir, writeFile, unlink } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import type { StorageService, UploadResult } from "../types";
+import type { StorageService, UploadResult } from "../types.ts";
 
 export class LocalAdapter implements StorageService {
   private uploadDir: string;

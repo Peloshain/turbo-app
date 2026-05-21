@@ -1,6 +1,6 @@
 import type { RouterClient } from "@orpc/server";
 
-import { protectedProcedure, publicProcedure } from "../index";
+import { protectedProcedure, publicProcedure } from "../index.ts";
 
 export const appRouter = {
   healthCheck: publicProcedure.handler(() => {

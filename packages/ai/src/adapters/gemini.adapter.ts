@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import type { AIService, AIAnalysisResult } from "../types";
+import type { AIService, AIAnalysisResult } from "../types.ts";
 
 export class GeminiAdapter implements AIService {
   private client: GoogleGenerativeAI;

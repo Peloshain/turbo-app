@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import type { AIService, AIAnalysisResult } from "../types";
+import type { AIService, AIAnalysisResult } from "../types.ts";
 
 export class LMStudioAdapter implements AIService {
   private client: OpenAI;

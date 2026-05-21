@@ -4,7 +4,7 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import type { StorageService, UploadResult } from "../types";
+import type { StorageService, UploadResult } from "../types.ts";
 
 export class R2Adapter implements StorageService {
   private client: S3Client;
