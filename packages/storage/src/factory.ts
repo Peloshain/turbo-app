@@ -1,6 +1,6 @@
 import type { StorageService } from "./types";
-import { LocalAdapter } from "./adapters/local.adapter";
-import { R2Adapter } from "./adapters/r2.adapter";
+import { LocalAdapter } from "./adapters/local.adapter.ts";
+import { R2Adapter } from "./adapters/r2.adapter.ts";
 import { env } from "@repo/env/server";
 
 export function createStorageService(): StorageService {
