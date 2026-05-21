@@ -1,5 +1,6 @@
+import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static"; // <- node version
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
 import { cors } from "hono/cors";
 import { itemsRouter } from "./routes/items";
 import { categoriesRouter } from "./routes/categories";
@@ -45,8 +46,6 @@ export const rpcHandler = new RPCHandler(appRouter, {
 });
 
 app.use("/*", async (c, next) => {
-  console.log("HERE");
-
   const context = await createContext({ context: c });
   const rpcResult = await rpcHandler.handle(c.req.raw, {
     prefix: "/rpc",
@@ -72,27 +71,16 @@ app.use("/*", async (c, next) => {
 app.use("/uploads/*", serveStatic({ root: "./" }));
 
 app.put("/uploads/*", async (c) => {
-  console.log("[upload] received request");
-  console.log("[upload] path:", c.req.path);
-  console.log("[upload] provider:", env.STORAGE_PROVIDER);
-
   if (env.STORAGE_PROVIDER !== "local") {
     return c.json({ error: "Not available" }, 404);
   }
-
   const key = c.req.path.replace("/uploads/", "");
-  console.log("[upload] key:", key);
-
   const body = await c.req.arrayBuffer();
-  console.log("[upload] body size:", body.byteLength);
-
   await storageService.upload({
     key,
     body: Buffer.from(body),
     mimeType: c.req.header("Content-Type") ?? "image/jpeg",
   });
-
-  console.log("[upload] done");
   return c.body(null, 200);
 });
 
@@ -100,7 +88,17 @@ app.route("/items", itemsRouter);
 app.route("/categories", categoriesRouter);
 app.route("/outfits", outfitsRouter);
 
-// Health check
-app.get("/health", (c) => c.json({ status: "ok" }));
+app.get("/health", (c) => c.json({ ok: true }));
+
+// Start the server
+serve(
+  {
+    fetch: app.fetch,
+    port: Number(process.env.PORT) || 3000,
+  },
+  (info) => {
+    console.log(`Server running on port ${info.port}`);
+  },
+);
 
 export default app;
