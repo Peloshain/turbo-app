@@ -16,15 +16,18 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@hono/node-server": "^1.19.11",
+    "@orpc/openapi": "catalog:",
+    "@orpc/server": "catalog:",
     "@repo/ai": "workspace:*",
+    "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/storage": "workspace:*",
-    "@repo/auth": "workspace:*",
-    "@repo/api": "workspace:*",
     "dotenv": "^17.3.1",
     "hono": "^4.12.7",
-    "openai": "^6.27.0",
-    "@orpc/openapi": "catalog:",
-    "@orpc/server": "catalog:"
+    "openai": "^6.27.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1"
   }
 }
