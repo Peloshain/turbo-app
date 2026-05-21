@@ -1,1 +1,1 @@
-export * from "./parseDataUrl";
+export * from "./parseDataUrl.ts";

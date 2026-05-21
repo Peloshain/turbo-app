@@ -1,4 +1,4 @@
-import type { StorageService } from "./types";
+import type { StorageService } from "./types.ts";
 import { LocalAdapter } from "./adapters/local.adapter.ts";
 import { R2Adapter } from "./adapters/r2.adapter.ts";
 import { env } from "@repo/env/server";

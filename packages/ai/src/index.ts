@@ -1,8 +1,8 @@
-import type { AIService } from "./types";
-import { GeminiAdapter } from "./adapters/gemini.adapter";
+import type { AIService } from "./types.ts";
+import { GeminiAdapter } from "./adapters/gemini.adapter.ts";
 import { env } from "@repo/env/server";
-import { LMStudioAdapter } from "./adapters/lmstudio.adapter";
-export * from "./utils";
+import { LMStudioAdapter } from "./adapters/lmstudio.adapter.ts";
+export * from "./utils/index.ts";
 
 export function createAIService(): AIService {
   //post mvp read this from BD instead env
