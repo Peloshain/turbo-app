@@ -11,6 +11,7 @@ COPY packages/auth/package.json ./packages/auth/
 COPY packages/storage/package.json ./packages/storage/
 COPY packages/api/package.json ./packages/api/
 COPY packages/config/package.json ./packages/config/
+COPY packages/env/package.json ./packages/env/ 
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
