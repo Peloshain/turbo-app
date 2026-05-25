@@ -119,6 +119,10 @@ export default function RootLayout() {
               }}
             />
             <Stack.Screen
+              name="manage-categories/index"
+              options={{ presentation: "modal", headerShown: false }}
+            />
+            <Stack.Screen
               name="item/[id]"
               options={{ headerTitle: "Item", headerBackTitle: "Back" }}
             />

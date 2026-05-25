@@ -132,6 +132,13 @@ export default function ProfileScreen() {
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={() => router.push("/manage-categories")}
+        >
+          <Text style={styles.secondaryButtonText}>Manage Categories</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
           <Text style={styles.signOutText}>Log Out</Text>
         </TouchableOpacity>
@@ -238,4 +245,17 @@ const styles = StyleSheet.create({
   toggleText: { flex: 1, gap: 4 },
   toggleTitle: { fontSize: 16, fontWeight: "600", color: ACCENT },
   toggleSubtitle: { fontSize: 13, color: MUTED, lineHeight: 18 },
+  secondaryButton: {
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#E5E5EA",
+    backgroundColor: "#fff",
+  },
+  secondaryButtonText: {
+    color: "#1C1C1E",
+    fontSize: 16,
+    fontWeight: "500",
+  },
 });
